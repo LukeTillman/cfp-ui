@@ -5,6 +5,9 @@ import md5 from 'md5';
 
 import { signIn, signOut } from './redux-actions';
 
+// Needs the CFP Logo image
+const logoImageUrl = require('cs_logo_white.png');
+
 class Header extends Component {
   render() {
     let userComponent;
@@ -31,10 +34,10 @@ class Header extends Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            Cassandra Summit 2016 CFP Review
+            <img src={logoImageUrl}/> CFP Review
           </Navbar.Brand>
+          <Navbar.Toggle />
         </Navbar.Header>
-        <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav navbar pullRight>
             {userComponent}

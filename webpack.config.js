@@ -7,6 +7,7 @@ const Paths = {
   SRC: path.resolve(PROJECT_DIR, 'src'),
   JS: path.resolve(PROJECT_DIR, 'src/js'),
   CSS: path.resolve(PROJECT_DIR, 'src/css'),
+  IMAGES: path.resolve(PROJECT_DIR, 'src/images'),
   OUT: path.resolve(PROJECT_DIR, 'dist')
 };
 
@@ -18,7 +19,7 @@ module.exports = {
   resolve: {
     extensions: [ '', '.js', '.jsx' ],
     root: [
-      Paths.JS, Paths.CSS
+      Paths.JS, Paths.CSS, Paths.IMAGES
     ]
   },
   output: {
@@ -38,6 +39,14 @@ module.exports = {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d\.\d\.\d)?$/, 
         loader: 'file',
         query: { name: 'fonts/[name].[ext]' }
+      },
+
+      // Allow PNG images to be required from code
+      { 
+        test: /\.png$/, 
+        include: Paths.SRC, 
+        loader: 'file',
+        query: { name: 'images/[name].[ext]' } 
       }
     ]
   },
