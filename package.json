@@ -25,6 +25,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "bootswatch": "^3.3.6",
+    "md5": "^2.1.0",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",
