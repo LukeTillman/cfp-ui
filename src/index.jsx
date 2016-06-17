@@ -1,5 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+
+import { store } from './js/redux-store';
 
 // CSS needed by the app
 require('bootswatch/flatly/bootstrap.css');
@@ -12,6 +15,8 @@ body.appendChild(div);
 
 // Render react app
 render(
-  <h1>Hello!</h1>,
+  <Provider store={store}>
+    <h1>Hello!</h1>
+  </Provider>,
   div
 );

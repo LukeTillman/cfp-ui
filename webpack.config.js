@@ -12,6 +12,7 @@ const Paths = {
 
 // Export the webpack config
 module.exports = {
+  devtool: 'source-map',
   context: Paths.SRC,
   entry: './index.jsx',
   resolve: {
@@ -39,5 +40,13 @@ module.exports = {
         query: { name: 'fonts/[name].[ext]' }
       }
     ]
-  }
+  },
+  plugins: [
+    // Define process.env.NODE_ENV in the app based on the setting during the build
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV === 'production' ? 'production' : 'development')
+      }
+    })
+  ]
 };
