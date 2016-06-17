@@ -13,7 +13,7 @@ const Paths = {
 // Export the webpack config
 module.exports = {
   context: Paths.SRC,
-  entry: './index.js',
+  entry: './index.jsx',
   resolve: {
     extensions: [ '', '.js', '.jsx' ],
     root: [
@@ -27,7 +27,17 @@ module.exports = {
   module: {
     loaders: [
       // Babel transpiler (see .babelrc file for presets)
-      { test: /\.jsx?$/, include: Paths.SRC, loader: 'babel' }
+      { test: /\.jsx?$/, include: Paths.SRC, loader: 'babel' },
+
+      // CSS files
+      { test: /\.css$/, loader: "style!css" },
+
+      // Allow font loading (to support third party CSS referencing fonts)
+      { 
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d\.\d\.\d)?$/, 
+        loader: 'file',
+        query: { name: 'fonts/[name].[ext]' }
+      }
     ]
   }
 };
