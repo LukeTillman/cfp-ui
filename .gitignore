@@ -28,3 +28,6 @@ node_modules
 
 # Build and package output
 /dist
+
+# Sample test data
+/server/sample-data

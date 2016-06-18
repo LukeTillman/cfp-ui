@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import Header from './header';
+import TalkList from './talk-list';
 
 class App extends Component {
   render() {
@@ -14,7 +15,7 @@ class App extends Component {
               Options
             </Col>
             <Col sm={9}>
-              Content.
+              <TalkList />
             </Col>
           </Row>
         </Grid>
