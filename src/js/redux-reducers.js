@@ -1,14 +1,14 @@
+import { combineReducers } from 'redux';
 import { ActionTypes } from './redux-actions';
 
-const defaultState = {
-  errorMessage: null,
-  email: null,
-  talksLoading: false,
-  talks: [ ]
-};
+/**
+ * User state
+ */
 
-export function rootReducer(state = defaultState, action) {
-  switch(action.type) {
+const defaultUserState = { email: null };
+
+function userReducer(state = defaultUserState, action) {
+  switch (action.type) {
     case ActionTypes.SIGN_IN:
       return {
         ...state,
@@ -20,26 +20,94 @@ export function rootReducer(state = defaultState, action) {
         ...state,
         email: null
       };
+  }
 
+  return state;
+}
+
+/**
+ * Abstract list state
+ */
+
+const defaultAbstractListState = {
+  loading: false,
+  talks: [],
+  selectedId: null
+};
+
+function abstractListReducer(state = defaultAbstractListState, action) {
+  switch (action.type) {
     case ActionTypes.GET_ABSTRACTS:
       return {
         ...state,
-        talksLoading: true
+        loading: true
       };
 
     case ActionTypes.GET_ABSTRACTS_COMPLETE:
       let talks = action.error === true ? state.talks : action.payload;
-      let errorMessage = action.error === true ? action.payload.message : state.errorMessage;
       return {
         ...state,
-        talksLoading: false,
-        talks,
-        errorMessage
+        loading: false,
+        talks
       };
+    case ActionTypes.SHOW_DETAILS:
+      return {
+        ...state,
+        selectedId: action.payload
+      };
+
+    case ActionTypes.HIDE_DETAILS:
+      return {
+        ...state,
+        selectedId: null
+      };
+  }
+    
+  return state;
+}
+
+const defaultErrorMessageState = null;
+function errorMessageReducer(state = defaultErrorMessageState, action) {
+  switch (action.type) {
+    case ActionTypes.GET_ABSTRACTS_COMPLETE:
+    case ActionTypes.GET_COMMENTS_COMPLETE:
+      if (action.error === true) {
+        return action.payload.message;
+      }
+      break;
+
+    case ActionTypes.DISMISS_ERROR:
+      return defaultErrorMessageState;
+  }
+
+  return state;
+}
+
+/**
+ * Comments state
+ */
+const defaultCommentsState = {
+
+};
+
+function commentsReducer(state = defaultCommentsState, action) {
+  switch (action.type) {
+    case ActionTypes.GET_COMMENTS:
+    case ActionTypes.GET_COMMENTS_COMPLETE:
 
   }
 
   return state;
-};
+}
+
+/**
+ * The root reducer function
+ */
+const rootReducer = combineReducers({
+  user: userReducer,
+  abstractList: abstractListReducer,
+  comments: commentsReducer,
+  errorMessage: errorMessageReducer
+});
 
 export default rootReducer;
