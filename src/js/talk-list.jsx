@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Row, Col, Glyphicon, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 
 import { getAbstracts, showDetails } from './redux-actions';
 
@@ -50,10 +51,12 @@ class TalkList extends Component {
     }
     return (
       <ListGroup>
-        {talks.map(t => {
-          let active = selectedId === t.id;
-          return <TalkListItem {...t} key={t.id} active={active} onSelect={id => this.handleSelect(id)} />
-        })}
+        <GeminiScrollbar>
+          {talks.map(t => {
+            let active = selectedId === t.id;
+            return <TalkListItem {...t} key={t.id} active={active} onSelect={id => this.handleSelect(id)} />
+          })}
+        </GeminiScrollbar>
       </ListGroup>
     );
   }

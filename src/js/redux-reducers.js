@@ -100,8 +100,13 @@ function commentsReducer(state = defaultCommentsState, action) {
 
     case ActionTypes.GET_COMMENTS_COMPLETE:
       if (action.error === true) {
-        return state;
+        let newState = {
+          ...state
+        };
+        delete newState[action.meta.id];
+        return newState;
       }
+      
       return {
         ...state,
         [action.meta.id]: action.payload

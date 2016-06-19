@@ -7,11 +7,13 @@ import App from './js/app';
 
 // CSS needed by the app
 require('bootswatch/flatly/bootstrap.css');
+require('gemini-scrollbar/gemini-scrollbar.css');
 require('app.css');
 
 // Create an empty div and attach to the body
 let body = document.getElementsByTagName('body')[0];
 let div = document.createElement('div');
+div.id = "cfp-app-wrapper";
 body.appendChild(div);
 
 // Render react app

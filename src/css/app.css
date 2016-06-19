@@ -25,6 +25,10 @@
  * Layout
  */
 
+html, body, #cfp-app-wrapper, #cfp-app {
+  height: 100%;
+}
+
 #main-content-wrapper {
   height: 100%;
   padding-top: 60px;  /* Leave space for header */
@@ -67,9 +71,10 @@
 /* Talk content pane */
 #talk-content {
   flex: 1;
-  margin-top: 21px;
+  margin: 21px 0;
   display: flex;
   flex-flow: column nowrap;
+  position: relative;
 }
 
 #main-error-alert {
@@ -80,22 +85,34 @@
   flex: 1;
   display: flex;
   flex-flow: row nowrap;
+  align-items: stretch;
+  position: relative;
 }
 
 .talk-tab-content {
   flex: 1;
   display: none;
   flex-flow: column nowrap;
+  position: relative;
 }
 
 .talk-tab-content.active {
   display: flex;
 }
 
+#talk-details-main {
+  flex: 1;
+}
+
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   #mobile-tabs {
     display: none;
+  }
+
+  #talk-content {
+    margin: 21px auto;
   }
 
   .talk-tab-content {
@@ -116,19 +133,67 @@
 /**
  * Talk listings table
  */
+#talk-list {
+  border: 1px solid #ecf0f1;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+#talk-list > .list-group {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 0;
+  flex: 1;
+  position: relative;
+  border-top: 1px solid #ecf0f1;
+}
+
+#talk-list > .list-group > .gm-scrollbar-container {
+  position: absolute;
+}
+
+#talk-list > .list-group .list-group-item {
+  border-width: 0px;
+  border-bottom-width: 2px;
+  border-radius: 0px;
+}
+
 #talk-list .list-group-item h5 {
   margin-top: 0;
   margin-bottom: 5px;
 }
 
 /**
- * Talk details
+ * Take action on a talk
  */
-#talk-details h3 {
+#talk-actions {
+  position: relative;
+  margin-bottom: 21px;
+}
+
+/**
+ * Talk details panel
+ */
+#talk-details-main {
+  position: relative;
+  margin-bottom: 21px;
+  border: 1px solid #ecf0f1;
+  border-radius: 4px;
+}
+
+#talk-details-main > .gm-scrollbar-container {
+  position: absolute;
+}
+
+#talk-details-main > .gm-scrollbar-container > .gm-scroll-view {
+  padding: 15px;
+}
+
+#talk-details-main h3 {
   margin-top: 0;
 }
 
-#talk-details .label {
+#talk-details-main .label {
   font-size: 100%;
 }
 
@@ -140,6 +205,14 @@
 
 .talk-comments > li > img.pull-left {
   margin-left: -50px;
+}
+
+/**
+ * Comment on a talk
+ */
+#talk-comment {
+  border: 1px solid #ecf0f1;
+  border-radius: 4px;
 }
 
 /**

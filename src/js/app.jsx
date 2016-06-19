@@ -7,6 +7,8 @@ import { signIn, signOut, dismissError } from './redux-actions';
 import Header from './header';
 import TalkList from './talk-list';
 import TalkDetails from './talk-details';
+import TalkActions from './talk-actions';
+import TalkComment from './talk-comment';
 
 class App extends Component {
   constructor(props) {
@@ -47,7 +49,7 @@ class App extends Component {
     }
 
     return (
-      <div>
+      <div id="cfp-app">
         <Header email={email} signIn={signIn} signOut={signOut} />
 
         <div id="main-content-wrapper">
@@ -64,12 +66,15 @@ class App extends Component {
               <div id="talk-tab-contents">
                 {/* Talk list pane */}
                 <div id="talk-list" className={listClass}>
+                  <h4>Sorting</h4>
                   <TalkList />
                 </div>
 
                 {/* Talk details pane */}
                 <div id="talk-details" className={detailsClass}>
+                  <TalkActions />
                   <TalkDetails talk={selectedTalk} comments={selectedComments} />
+                  <TalkComment />
                 </div>
               </div>
             </div>
