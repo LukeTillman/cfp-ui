@@ -49,7 +49,7 @@ class TalkList extends Component {
       );
     }
     return (
-      <ListGroup id="talk-list">
+      <ListGroup>
         {talks.map(t => {
           let active = selectedId === t.id;
           return <TalkListItem {...t} key={t.id} active={active} onSelect={id => this.handleSelect(id)} />

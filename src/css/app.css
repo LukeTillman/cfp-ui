@@ -18,14 +18,102 @@
   border: 1px solid #1a252f;
 }
 
-#main-content {
-  padding-top: 80px;
+/**
+ * Layout
+ */
+
+#main-content-wrapper {
+  height: 100%;
+  padding-top: 60px;  /* Leave space for header */
 }
+
+#main-content {
+  height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+/* Tabs only visible on mobile */
+#mobile-tabs {
+  display: flex;
+  flex-flow: row nowrap;
+  background-color: #2c3e50;
+  box-shadow: 0 1px 5px #ccc; 
+}
+
+#mobile-tabs > li {
+  flex: 1;
+  text-align: center;
+  float: none;
+  margin: 0;
+}
+
+#mobile-tabs > li > a {
+  background-color: #2c3e50;
+  color: #999;
+  border-radius: 0;
+}
+
+#mobile-tabs > li.active > a {
+  color: #fff;
+  border-bottom: 3px solid #fff;
+}
+
+/* Talk content pane */
+#talk-content {
+  flex: 1;
+  margin-top: 21px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#main-error-alert {
+  margin-bottom: 21px;
+}
+
+#talk-tab-contents {
+  flex: 1;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.talk-tab-content {
+  flex: 1;
+  display: none;
+  flex-flow: column nowrap;
+}
+
+.talk-tab-content.active {
+  display: flex;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  #mobile-tabs {
+    display: none;
+  }
+
+  .talk-tab-content {
+    display: flex;
+  }
+
+  #talk-list {
+    flex: 1;
+    margin-right: 21px;
+  }
+
+  #talk-details {
+    flex: 2;
+  }
+}
+
 
 /**
  * Talk listings table
  */
-#talk-list > .list-group-item h5 {
+#talk-list .list-group-item h5 {
   margin-top: 0;
   margin-bottom: 5px;
 }

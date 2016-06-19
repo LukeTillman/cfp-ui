@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Alert } from 'react-bootstrap';
+import { Grid, Row, Col, Alert, Nav, NavItem } from 'react-bootstrap';
 
 import { signIn, signOut, dismissError } from './redux-actions';
 
@@ -9,12 +9,24 @@ import TalkList from './talk-list';
 import TalkDetails from './talk-details';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeTab: 1
+    };
+  }
+
+  tabSelected(eventKey) {
+    this.setState({ activeTab: eventKey });
+  }
+
   render() {
     const { email, signIn, signOut, errorMessage, dismissError, selectedId, talks } = this.props;
 
     let errorAlert;
     if (errorMessage !== null) {
-      errorAlert = <Alert bsStyle="danger" onDismiss={dismissError}>{errorMessage}</Alert> 
+      errorAlert = <Alert bsStyle="danger" id="main-error-alert" onDismiss={dismissError}>{errorMessage}</Alert> 
     }
 
     let selectedTalk = null;
@@ -22,25 +34,45 @@ class App extends Component {
       selectedTalk = talks.find(t => t.id === selectedId);
     }
 
+    let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
+    switch (this.state.activeTab) {
+      case 1:
+        listClass += ' active';
+        break;
+      case 2:
+        detailsClass += ' active';
+        break;
+    }
+
     return (
       <div>
         <Header email={email} signIn={signIn} signOut={signOut} />
 
-        <Grid id="main-content">
-          <Row>
-            <Col xs={12}>
+        <div id="main-content-wrapper">
+          <div id="main-content">
+            {/* Tabs only visible on mobile */}
+            <Nav bsStyle="pills" id="mobile-tabs" activeKey={this.state.activeTab} onSelect={eventKey => this.tabSelected(eventKey)}>
+              <NavItem eventKey={1} title="Abstract List">List</NavItem>
+              <NavItem eventKey={2} title="Abstract Details">Details</NavItem>
+            </Nav>
+
+            <div id="talk-content" className="container">
               {errorAlert}
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={4}>
-              <TalkList />
-            </Col>
-            <Col sm={8}>
-              <TalkDetails talk={selectedTalk} />
-            </Col>
-          </Row>
-        </Grid>
+
+              <div id="talk-tab-contents">
+                {/* Talk list pane */}
+                <div id="talk-list" className={listClass}>
+                  <TalkList />
+                </div>
+
+                {/* Talk details pane */}
+                <div id="talk-details" className={detailsClass}>
+                  <TalkDetails talk={selectedTalk} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

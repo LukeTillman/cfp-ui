@@ -9,7 +9,7 @@ function TalkDetails({ talk, className }) {
   let authorsList = Object.keys(talk.authors).map(email => talk.authors[email]).join(', ');
 
   return (
-    <Panel id="talk-details">
+    <Panel>
       <h3>{talk.title}</h3>
       <p>
         <strong>{authorsList}</strong> &#8226; {talk.company}<br />
