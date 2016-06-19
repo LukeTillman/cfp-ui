@@ -3,15 +3,15 @@ import { Row, Col, Glyphicon, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-import { getAbstracts, showDetails } from './redux-actions';
+import { getAbstracts, changeSelection } from './redux-actions';
 
 /**
  * A stateless component representing a single list item.
  */
-function TalkListItem({ id, title, authors, company, active, onSelect }) {
+function TalkListItem({ id, title, authors, company, active, onClick }) {
   let authorsList = Object.keys(authors).map(email => authors[email]).join(', ');
   return (
-    <ListGroupItem onClick={e => onSelect(id)} active={active}>
+    <ListGroupItem onClick={onClick} active={active}>
       <h5>{title}</h5>
       <small>{authorsList}</small><br/>
       <small className="text-muted">{company}</small>
@@ -26,7 +26,7 @@ TalkListItem.propTypes = {
   authors: PropTypes.object.isRequired,
   company: PropTypes.string,
   active: PropTypes.bool.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 };
 
 /**
@@ -43,7 +43,7 @@ class TalkList extends Component {
   }
 
   render() {
-    let { talks, loading, selectedId } = this.props;
+    let { talks, loading, selectedIndex } = this.props;
     if (loading) {
       return (
         <h1 className="text-center"><Glyphicon glyph="refresh" className="glyphicon-spin" /></h1>
@@ -52,9 +52,9 @@ class TalkList extends Component {
     return (
       <ListGroup>
         <GeminiScrollbar>
-          {talks.map(t => {
-            let active = selectedId === t.id;
-            return <TalkListItem {...t} key={t.id} active={active} onSelect={id => this.handleSelect(id)} />
+          {talks.map((t, idx) => {
+            let active = selectedIndex === idx;
+            return <TalkListItem {...t} key={t.id} active={active} onClick={() => this.props.changeSelection(idx)} />
           })}
         </GeminiScrollbar>
       </ListGroup>
@@ -66,17 +66,17 @@ class TalkList extends Component {
 TalkList.propTypes = {
   loading: PropTypes.bool.isRequired,
   talks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedId: PropTypes.string,
+  selectedIndex: PropTypes.number.isRequired,
 
   // Action creators
   getAbstracts: PropTypes.func.isRequired,
-  showDetails: PropTypes.func.isRequired
+  changeSelection: PropTypes.func.isRequired
 };
 
 // Map redux state to props
 function mapStateToProps(state) {
-  const { abstractList: { talks, loading, selectedId } } = state;
-  return { talks, loading, selectedId };
+  const { abstractList: { talks, loading, selectedIndex } } = state;
+  return { talks, loading, selectedIndex };
 }
 
-export default connect(mapStateToProps, { getAbstracts, showDetails })(TalkList);
+export default connect(mapStateToProps, { getAbstracts, changeSelection })(TalkList);

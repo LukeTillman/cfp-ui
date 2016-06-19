@@ -17,9 +17,8 @@ export const ActionTypes = {
   GET_COMMENTS: 'GET_COMMENTS',
   GET_COMMENTS_COMPLETE: 'GET_COMMENTS_COMPLETE',
 
-  // Show/hide a talk's details
-  SHOW_DETAILS: 'SHOW_DETAILS',
-  HIDE_DETAILS: 'HIDE_DETAILS'
+  // Change the currently selected talk
+  CHANGE_SELECTION: 'CHANGE_SELECTION'
 };
 
 /**
@@ -88,14 +87,58 @@ export function getAbstracts() {
       }
 
       // OK, filter out empty abstracts from response
-      let abstracts = JSON.parse(res.body).filter(a => a.upstream_id !== 0);
+      let abstracts = JSON.parse(res.body)
+        .filter(a => a.upstream_id !== 0);
+
       dispatch({
         type: ActionTypes.GET_ABSTRACTS_COMPLETE,
         payload: abstracts
       });
+
+      dispatch(changeSelection(0));
     });
   };
 };
+
+/**
+ * Change the selected talk index.
+ */
+export function changeSelection(idx) {
+  return function changeSelection(dispatch, getState) {
+    let { abstractList: { talks } } = getState();
+
+    // Get comments for the new talk we're about to switch to if we haven't yet
+    dispatch(getComments(talks[idx].id));
+
+    // Change the selection
+    dispatch({
+      type: ActionTypes.CHANGE_SELECTION,
+      payload: idx
+    });
+  };
+};
+
+/**
+ * Goto the next talk in the list.
+ */
+export function nextTalk() {
+  return function nextTalkImpl(dispatch, getState) {
+    let { abstractList: { selectedIndex, talks } } = getState();
+    if (selectedIndex === talks.length - 1) return;
+    dispatch(changeSelection(selectedIndex + 1));
+  };
+};
+
+/**
+ * Goto the previous talk in the list.
+ */
+export function previousTalk() {
+  return function previousTalkImpl(dispatch, getState) {
+    let { abstractList: { selectedIndex } } = getState();
+    if (selectedIndex <= 0) return;
+    dispatch(changeSelection(selectedIndex - 1));
+  };
+}
 
 /**
  * Get the comments for an abstract.

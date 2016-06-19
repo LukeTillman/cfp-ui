@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import { Grid, Row, Col, Alert, Nav, NavItem } from 'react-bootstrap';
 
-import { signIn, signOut, dismissError } from './redux-actions';
+import { signIn, signOut, dismissError, nextTalk, previousTalk } from './redux-actions';
 
 import Header from './header';
 import TalkList from './talk-list';
@@ -24,7 +25,7 @@ class App extends Component {
   }
 
   render() {
-    const { email, signIn, signOut, errorMessage, dismissError, selectedId, talks, comments } = this.props;
+    const { email, signIn, signOut, errorMessage, dismissError, selectedIndex, talks, comments } = this.props;
 
     let errorAlert;
     if (errorMessage !== null) {
@@ -33,9 +34,9 @@ class App extends Component {
 
     let selectedTalk = null;
     let selectedComments = null;
-    if (selectedId !== null) {
-      selectedTalk = talks.find(t => t.id === selectedId);
-      selectedComments = comments[selectedId];
+    if (selectedIndex >= 0) {
+      selectedTalk = talks[selectedIndex];
+      selectedComments = comments[selectedTalk.id];
     }
 
     let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
@@ -72,7 +73,7 @@ class App extends Component {
 
                 {/* Talk details pane */}
                 <div id="talk-details" className={detailsClass}>
-                  <TalkActions />
+                  <TalkActions onNext={() => this.props.nextTalk()} onPrevious={() => this.props.previousTalk()} />
                   <TalkDetails talk={selectedTalk} comments={selectedComments} />
                   <TalkComment />
                 </div>
@@ -89,25 +90,28 @@ class App extends Component {
 App.propTypes = {
   email: PropTypes.string,
   errorMessage: PropTypes.string,
-  selectedId: PropTypes.string,
-  talks: PropTypes.arrayOf(PropTypes.object),
-  comments: PropTypes.object,
+  selectedIndex: PropTypes.number.isRequired,
+  talks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  comments: PropTypes.object.isRequired,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
-  dismissError: PropTypes.func.isRequired
+  dismissError: PropTypes.func.isRequired,
+  nextTalk: PropTypes.func.isRequired,
+  previousTalk: PropTypes.func.isRequired
 };
 
+
 function mapStateToProps(state) {
-  const { errorMessage, user: { email }, abstractList: { selectedId, talks }, comments } = state;
+  const { errorMessage, user: { email }, abstractList: { selectedIndex, talks }, comments } = state;
   return {
     errorMessage,
     email,
-    selectedId,
+    selectedIndex,
     talks,
     comments
   };
 }
 
-export default connect(mapStateToProps, { signIn, signOut, dismissError })(App);
+export default connect(mapStateToProps, { signIn, signOut, dismissError, nextTalk, previousTalk })(App);

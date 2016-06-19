@@ -32,7 +32,7 @@ function userReducer(state = defaultUserState, action) {
 const defaultAbstractListState = {
   loading: false,
   talks: [],
-  selectedId: null
+  selectedIndex: -1
 };
 
 function abstractListReducer(state = defaultAbstractListState, action) {
@@ -44,23 +44,22 @@ function abstractListReducer(state = defaultAbstractListState, action) {
       };
 
     case ActionTypes.GET_ABSTRACTS_COMPLETE:
-      let talks = action.error === true ? state.talks : action.payload;
+      if (action.error === true) {
+        return state;
+      }
+
       return {
         ...state,
         loading: false,
-        talks
-      };
-    case ActionTypes.SHOW_DETAILS:
-      return {
-        ...state,
-        selectedId: action.payload
+        talks: action.payload
       };
 
-    case ActionTypes.HIDE_DETAILS:
+    case ActionTypes.CHANGE_SELECTION:
       return {
         ...state,
-        selectedId: null
+        selectedIndex: action.payload
       };
+
   }
     
   return state;
@@ -86,9 +85,7 @@ function errorMessageReducer(state = defaultErrorMessageState, action) {
 /**
  * Comments state
  */
-const defaultCommentsState = {
-
-};
+const defaultCommentsState = {};
 
 function commentsReducer(state = defaultCommentsState, action) {
   switch (action.type) {
@@ -106,7 +103,7 @@ function commentsReducer(state = defaultCommentsState, action) {
         delete newState[action.meta.id];
         return newState;
       }
-      
+
       return {
         ...state,
         [action.meta.id]: action.payload
