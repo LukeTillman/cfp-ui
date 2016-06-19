@@ -6,32 +6,38 @@ import { signIn, signOut, dismissError } from './redux-actions';
 
 import Header from './header';
 import TalkList from './talk-list';
+import TalkDetails from './talk-details';
 
 class App extends Component {
   render() {
-    const { email, signIn, signOut, errorMessage, dismissError } = this.props;
+    const { email, signIn, signOut, errorMessage, dismissError, selectedId, talks } = this.props;
 
     let errorAlert;
     if (errorMessage !== null) {
       errorAlert = <Alert bsStyle="danger" onDismiss={dismissError}>{errorMessage}</Alert> 
     }
 
+    let selectedTalk = null;
+    if (selectedId !== null) {
+      selectedTalk = talks.find(t => t.id === selectedId);
+    }
+
     return (
       <div>
         <Header email={email} signIn={signIn} signOut={signOut} />
 
-        <Grid>
+        <Grid id="main-content">
           <Row>
             <Col xs={12}>
               {errorAlert}
             </Col>
           </Row>
           <Row>
-            <Col sm={3}>
-              Options
-            </Col>
-            <Col sm={9}>
+            <Col sm={4}>
               <TalkList />
+            </Col>
+            <Col sm={8}>
+              <TalkDetails talk={selectedTalk} />
             </Col>
           </Row>
         </Grid>
@@ -44,6 +50,7 @@ class App extends Component {
 App.propTypes = {
   email: PropTypes.string,
   errorMessage: PropTypes.string,
+  selectedId: PropTypes.string,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
@@ -52,10 +59,12 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { errorMessage, user: { email } } = state;
+  const { errorMessage, user: { email }, abstractList: { selectedId, talks } } = state;
   return {
     errorMessage,
-    email
+    email,
+    selectedId,
+    talks
   };
 }
 

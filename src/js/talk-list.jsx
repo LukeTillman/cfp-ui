@@ -8,20 +8,12 @@ import { getAbstracts, showDetails } from './redux-actions';
  * A stateless component representing a single list item.
  */
 function TalkListItem({ id, title, authors, company, active, onSelect }) {
+  let authorsList = Object.keys(authors).map(email => authors[email]).join(', ');
   return (
     <ListGroupItem onClick={e => onSelect(id)} active={active}>
-      <Row>
-        <Col sm={8}>
-          <h4>{title}</h4>
-          <span className="text-muted">{Object.keys(authors).map(email => authors[email]).join(', ')}</span>
-        </Col>
-        <Col sm={2}>
-          {company}
-        </Col>
-        <Col sm={2}>
-          Rating
-        </Col>
-      </Row>
+      <h5>{title}</h5>
+      <small>{authorsList}</small><br/>
+      <small className="text-muted">{company}</small>
     </ListGroupItem>
   );
 }
@@ -56,9 +48,8 @@ class TalkList extends Component {
         <h1 className="text-center"><Glyphicon glyph="refresh" className="glyphicon-spin" /></h1>
       );
     }
-
     return (
-      <ListGroup className="talks-list">
+      <ListGroup id="talk-list">
         {talks.map(t => {
           let active = selectedId === t.id;
           return <TalkListItem {...t} key={t.id} active={active} onSelect={id => this.handleSelect(id)} />

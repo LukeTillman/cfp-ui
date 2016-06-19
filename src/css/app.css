@@ -18,12 +18,27 @@
   border: 1px solid #1a252f;
 }
 
+#main-content {
+  padding-top: 80px;
+}
+
 /**
  * Talk listings table
  */
-.talks-list > .list-group-item h4 {
+#talk-list > .list-group-item h5 {
   margin-top: 0;
   margin-bottom: 5px;
+}
+
+/**
+ * Talk details
+ */
+#talk-details h3 {
+  margin-top: 0;
+}
+
+#talk-details .label {
+  font-size: 100%;
 }
 
 /**

@@ -30,10 +30,10 @@ function Header({ email, signIn, signOut}) {
   }
 
   return (
-    <Navbar>
+    <Navbar fixedTop>
       <Navbar.Header>
         <Navbar.Brand>
-          <img src={logoImageUrl}/> CFP Review
+          <img src={logoImageUrl}/> Presentations Review
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
