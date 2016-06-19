@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import md5 from 'md5';
+
+import UserImage from './user-image';
 
 // Needs the CFP Logo image
 const logoImageUrl = require('cs_logo_white.png');
@@ -10,12 +11,9 @@ const logoImageUrl = require('cs_logo_white.png');
 function Header({ email, signIn, signOut}) {
   let userComponent;
   if (email) {
-    let hash = md5(email);
-    let imageUrl = `https://robohash.org/${hash}?gravatar=hashed&set=any&bgset=any`;
-
     let dropdownTitle = (
       <span>
-        <img src={imageUrl} id="gravatar" />
+        <UserImage email={email} />
         {email}
       </span>
     );

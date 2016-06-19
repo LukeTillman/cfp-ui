@@ -93,8 +93,19 @@ const defaultCommentsState = {
 function commentsReducer(state = defaultCommentsState, action) {
   switch (action.type) {
     case ActionTypes.GET_COMMENTS:
-    case ActionTypes.GET_COMMENTS_COMPLETE:
+      return {
+        ...state,
+        [action.meta.id]: []
+      };
 
+    case ActionTypes.GET_COMMENTS_COMPLETE:
+      if (action.error === true) {
+        return state;
+      }
+      return {
+        ...state,
+        [action.meta.id]: action.payload
+      };
   }
 
   return state;

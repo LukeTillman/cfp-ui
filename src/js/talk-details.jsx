@@ -1,9 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { Panel, Label } from 'react-bootstrap';
+import moment from 'moment';
 
-function TalkDetails({ talk, className }) {
+import UserImage from './user-image';
+
+function TalkComment({ created, email, body }) {
+  return (
+    <li>
+      <UserImage email={email} className="pull-left" />
+      <strong>{email}</strong> <span className="text-muted">{moment(created).fromNow()}</span><br/>
+      {body}
+    </li>
+  );
+}
+
+function TalkDetails({ talk, comments }) {
   if (talk === null) {
     return null;
+  }
+
+  if (!comments) {
+    comments = [];
   }
 
   let authorsList = Object.keys(talk.authors).map(email => talk.authors[email]).join(', ');
@@ -24,7 +41,14 @@ function TalkDetails({ talk, className }) {
       
       <p className="text-right">
         <Label bsStyle="info">{talk.tracks}</Label>
-      </p>      
+      </p>
+
+      <br/>
+
+      <h4>Comments</h4>
+      <ul className="talk-comments list-unstyled">
+        {comments.map(c => <TalkComment {...c} key={c.id} />)}
+      </ul>
     </Panel>
   );
 }
@@ -32,7 +56,7 @@ function TalkDetails({ talk, className }) {
 // Prop validation
 TalkDetails.propTypes = {
   talk: PropTypes.object,
-  className: PropTypes.string
+  comments: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default TalkDetails;

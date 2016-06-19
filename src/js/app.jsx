@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   render() {
-    const { email, signIn, signOut, errorMessage, dismissError, selectedId, talks } = this.props;
+    const { email, signIn, signOut, errorMessage, dismissError, selectedId, talks, comments } = this.props;
 
     let errorAlert;
     if (errorMessage !== null) {
@@ -30,8 +30,10 @@ class App extends Component {
     }
 
     let selectedTalk = null;
+    let selectedComments = null;
     if (selectedId !== null) {
       selectedTalk = talks.find(t => t.id === selectedId);
+      selectedComments = comments[selectedId];
     }
 
     let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
@@ -67,7 +69,7 @@ class App extends Component {
 
                 {/* Talk details pane */}
                 <div id="talk-details" className={detailsClass}>
-                  <TalkDetails talk={selectedTalk} />
+                  <TalkDetails talk={selectedTalk} comments={selectedComments} />
                 </div>
               </div>
             </div>
@@ -83,6 +85,8 @@ App.propTypes = {
   email: PropTypes.string,
   errorMessage: PropTypes.string,
   selectedId: PropTypes.string,
+  talks: PropTypes.arrayOf(PropTypes.object),
+  comments: PropTypes.object,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
@@ -91,12 +95,13 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { errorMessage, user: { email }, abstractList: { selectedId, talks } } = state;
+  const { errorMessage, user: { email }, abstractList: { selectedId, talks }, comments } = state;
   return {
     errorMessage,
     email,
     selectedId,
-    talks
+    talks,
+    comments
   };
 }
 

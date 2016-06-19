@@ -134,7 +134,7 @@ function getComments(id) {
 
       // OK, so dispatch comments
       dispatch({
-        type: ActionTypes.GET_ABSTRACTS_COMPLETE,
+        type: ActionTypes.GET_COMMENTS_COMPLETE,
         payload: JSON.parse(res.body),
         meta: { id } 
       });
