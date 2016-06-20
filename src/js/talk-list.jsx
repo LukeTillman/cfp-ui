@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Glyphicon, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Row, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-import { getAbstracts, changeSelection } from './redux-actions';
+import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled } from './redux-actions';
 
 /**
  * A stateless component representing a single list item.
@@ -38,17 +39,27 @@ class TalkList extends Component {
     this.props.getAbstracts();
   }
 
-  handleSelect(id) {
-    this.props.showDetails(id);
+  componentDidUpdate(prevProps) {
+    // Check if we need to enable or disable the previous and next buttons
+    if (this.props.selectedIndex <= 0 && this.props.previousDisabled === false) {
+      this.props.changePreviousDisabled(true);
+    }
+
+    if (this.props.selectedIndex > 0 && this.props.previousDisabled === true) {
+      this.props.changePreviousDisabled(false);
+    }
+
+    if (this.props.selectedIndex === this.props.talks.length - 1 && this.props.nextDisabled === false) {
+      this.props.changeNextDisabled(true);
+    }
+
+    if (this.props.selectedIndex !== this.props.talks.length - 1 && this.props.nextDisabled === true) {
+      this.props.changeNextDisabled(false);
+    }
   }
 
   render() {
-    let { talks, loading, selectedIndex } = this.props;
-    if (loading) {
-      return (
-        <h1 className="text-center"><Glyphicon glyph="refresh" className="glyphicon-spin" /></h1>
-      );
-    }
+    let { talks, selectedIndex } = this.props;
     return (
       <ListGroup>
         <GeminiScrollbar>
@@ -64,19 +75,38 @@ class TalkList extends Component {
 
 // Prop validation
 TalkList.propTypes = {
-  loading: PropTypes.bool.isRequired,
   talks: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedIndex: PropTypes.number.isRequired,
+  nextDisabled: PropTypes.bool.isRequired,
+  previousDisabled: PropTypes.bool.isRequired,
 
   // Action creators
   getAbstracts: PropTypes.func.isRequired,
-  changeSelection: PropTypes.func.isRequired
+  changeSelection: PropTypes.func.isRequired,
+  changeNextDisabled: PropTypes.func.isRequired,
+  changePreviousDisabled: PropTypes.func.isRequired
 };
 
-// Map redux state to props
-function mapStateToProps(state) {
-  const { abstractList: { talks, loading, selectedIndex } } = state;
-  return { talks, loading, selectedIndex };
-}
+const sortBySelector = state => state.abstractList.sortBy;
+const talkDataSelector = state => state.data.abstractsById;
+const talksSelector = createSelector(
+  sortBySelector,
+  talkDataSelector,
+  (sortBy, talksById) => {
+    // TODO: Sorting
+    return Object.keys(talksById).map(id => talksById[id]);
+  }
+);
 
-export default connect(mapStateToProps, { getAbstracts, changeSelection })(TalkList);
+const abstractListSelector = state => state.abstractList;
+
+const mapStateToProps = createSelector(
+  abstractListSelector,
+  talksSelector,
+  (abstractList, talks) => {
+    return { ...abstractList, talks };
+  }
+);
+
+
+export default connect(mapStateToProps, { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled })(TalkList);

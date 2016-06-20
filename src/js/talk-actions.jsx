@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 
-function TalkActions({ onNext, onPrevious }) {
+function TalkActions({ onNext, onPrevious, nextDisabled, previousDisabled }) {
   return (
     <ButtonToolbar id="talk-actions">
       <ButtonGroup bsSize="small">
-        <Button title="Previous talk" onClick={onPrevious}>
+        <Button title="Previous talk" disabled={previousDisabled} onClick={onPrevious}>
           <Glyphicon glyph="chevron-left" />
         </Button>
-        <Button title="Next talk" onClick={onNext}>
+        <Button title="Next talk" disabled={nextDisabled} onClick={onNext}>
           <Glyphicon glyph="chevron-right" />
         </Button>
       </ButtonGroup>
@@ -29,7 +29,9 @@ function TalkActions({ onNext, onPrevious }) {
 
 TalkActions.propTypes = {
   onNext: PropTypes.func.isRequired,
-  onPrevious: PropTypes.func.isRequired
+  onPrevious: PropTypes.func.isRequired,
+  nextDisabled: PropTypes.bool.isRequired,
+  previousDisabled: PropTypes.bool.isRequired
 };
 
 export default TalkActions;

@@ -17,8 +17,22 @@ export const ActionTypes = {
   GET_COMMENTS: 'GET_COMMENTS',
   GET_COMMENTS_COMPLETE: 'GET_COMMENTS_COMPLETE',
 
-  // Change the currently selected talk
-  CHANGE_SELECTION: 'CHANGE_SELECTION'
+  // Abstract list actions
+  CHANGE_SELECTION: 'CHANGE_SELECTION',
+  CHANGE_SORT_BY: 'CHANGE_SORT_BY',
+  CHANGE_NEXT_DISABLED: 'CHANGE_NEXT_DISABLED',
+  CHANGE_PREVIOUS_DISABLED: 'CHANGE_PREVIOUS_DISABLED'
+};
+
+/**
+ * Available sorting values
+ */
+export const SortByValues = {
+  DEFAULT: 'Default',
+  TITLE: 'Title',
+  AUTHOR: 'Author',
+  COMPANY: 'Company',
+  RATING: 'Rating'
 };
 
 /**
@@ -88,14 +102,17 @@ export function getAbstracts() {
 
       // OK, filter out empty abstracts from response
       let abstracts = JSON.parse(res.body)
-        .filter(a => a.upstream_id !== 0);
+        .filter(a => a.upstream_id !== 0)
+        .reduce((acc, abstract) => {
+          // Index by id
+          acc[abstract.id] = abstract;
+          return acc;
+        }, { })
 
       dispatch({
         type: ActionTypes.GET_ABSTRACTS_COMPLETE,
         payload: abstracts
       });
-
-      dispatch(changeSelection(0));
     });
   };
 };
@@ -104,17 +121,9 @@ export function getAbstracts() {
  * Change the selected talk index.
  */
 export function changeSelection(idx) {
-  return function changeSelection(dispatch, getState) {
-    let { abstractList: { talks } } = getState();
-
-    // Get comments for the new talk we're about to switch to if we haven't yet
-    dispatch(getComments(talks[idx].id));
-
-    // Change the selection
-    dispatch({
-      type: ActionTypes.CHANGE_SELECTION,
-      payload: idx
-    });
+  return {
+    type: ActionTypes.CHANGE_SELECTION,
+    payload: idx
   };
 };
 
@@ -123,8 +132,8 @@ export function changeSelection(idx) {
  */
 export function nextTalk() {
   return function nextTalkImpl(dispatch, getState) {
-    let { abstractList: { selectedIndex, talks } } = getState();
-    if (selectedIndex === talks.length - 1) return;
+    let { abstractList: { nextDisabled, selectedIndex } } = getState();
+    if (nextDisabled) return;
     dispatch(changeSelection(selectedIndex + 1));
   };
 };
@@ -134,11 +143,35 @@ export function nextTalk() {
  */
 export function previousTalk() {
   return function previousTalkImpl(dispatch, getState) {
-    let { abstractList: { selectedIndex } } = getState();
-    if (selectedIndex <= 0) return;
+    let { abstractList: { previousDisabled, selectedIndex } } = getState();
+    if (previousDisabled) return;
     dispatch(changeSelection(selectedIndex - 1));
   };
-}
+};
+
+/**
+ * Change how the abstract list is sorted.
+ */
+export function changeSortBy(value) {
+  return {
+    type: ActionTypes.CHANGE_SORT_BY,
+    payload: value
+  };
+};
+
+/**
+ * Change whether going to the next talk is disabled.
+ */
+export function changeNextDisabled(val) {
+  return { type: ActionTypes.CHANGE_NEXT_DISABLED, payload: val };
+};
+
+/**
+ * Change whether going to the previous talk is disabled.
+ */
+export function changePreviousDisabled(val) {
+  return { type: ActionTypes.CHANGE_PREVIOUS_DISABLED, payload: val };
+};
 
 /**
  * Get the comments for an abstract.

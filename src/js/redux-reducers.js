@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ActionTypes } from './redux-actions';
+import { ActionTypes, SortByValues } from './redux-actions';
 
 /**
  * User state
@@ -26,40 +26,70 @@ function userReducer(state = defaultUserState, action) {
 }
 
 /**
+ * Data from the server.
+ */
+
+const defaultDataState = {
+  abstractsById: {},
+  commentsByAbstractId: {}
+};
+
+function dataReducer(state = defaultDataState, action) {
+  if (action.error === true) return state;
+
+  switch (action.type) {
+    case ActionTypes.GET_ABSTRACTS_COMPLETE:
+      return {
+        ...state,
+        abstractsById: action.payload
+      };
+
+    case ActionTypes.GET_COMMENTS_COMPLETE:
+      return {
+        ...state,
+        commentsByAbstractId: {
+          ...state.commentsByAbstractId,
+          [action.meta.id]: action.payload
+        }
+      };
+  }
+
+  return state;
+}
+
+/**
  * Abstract list state
  */
 
 const defaultAbstractListState = {
-  loading: false,
-  talks: [],
-  selectedIndex: -1
+  selectedIndex: -1,
+  sortBy: SortByValues.DEFAULT,
+  nextDisabled: true,
+  previousDisabled: true
 };
 
 function abstractListReducer(state = defaultAbstractListState, action) {
   switch (action.type) {
-    case ActionTypes.GET_ABSTRACTS:
-      return {
-        ...state,
-        loading: true
-      };
-
-    case ActionTypes.GET_ABSTRACTS_COMPLETE:
-      if (action.error === true) {
-        return state;
-      }
-
-      return {
-        ...state,
-        loading: false,
-        talks: action.payload
-      };
-
     case ActionTypes.CHANGE_SELECTION:
       return {
         ...state,
         selectedIndex: action.payload
       };
-
+    case ActionTypes.CHANGE_NEXT_DISABLED:
+      return {
+        ...state,
+        nextDisabled: action.payload
+      };
+    case ActionTypes.CHANGE_PREVIOUS_DISABLED:
+      return {
+        ...state,
+        previousDisabled: action.payload
+      };
+    case ActionTypes.CHANGE_SORT_BY:
+      return {
+        ...state,
+        sortBy: action.payload
+      };
   }
     
   return state;
@@ -83,43 +113,12 @@ function errorMessageReducer(state = defaultErrorMessageState, action) {
 }
 
 /**
- * Comments state
- */
-const defaultCommentsState = {};
-
-function commentsReducer(state = defaultCommentsState, action) {
-  switch (action.type) {
-    case ActionTypes.GET_COMMENTS:
-      return {
-        ...state,
-        [action.meta.id]: []
-      };
-
-    case ActionTypes.GET_COMMENTS_COMPLETE:
-      if (action.error === true) {
-        let newState = {
-          ...state
-        };
-        delete newState[action.meta.id];
-        return newState;
-      }
-
-      return {
-        ...state,
-        [action.meta.id]: action.payload
-      };
-  }
-
-  return state;
-}
-
-/**
  * The root reducer function
  */
 const rootReducer = combineReducers({
   user: userReducer,
+  data: dataReducer,
   abstractList: abstractListReducer,
-  comments: commentsReducer,
   errorMessage: errorMessageReducer
 });
 

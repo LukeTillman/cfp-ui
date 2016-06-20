@@ -24,14 +24,10 @@ class App extends Component {
   }
 
   render() {
-    const { email, signIn, signOut, selectedIndex, talks, comments } = this.props;
+    const { email, signIn, signOut, nextTalk, previousTalk, nextDisabled, previousDisabled } = this.props;
 
     let selectedTalk = null;
     let selectedComments = null;
-    if (selectedIndex >= 0) {
-      selectedTalk = talks[selectedIndex];
-      selectedComments = comments[selectedTalk.id];
-    }
 
     let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
     switch (this.state.activeTab) {
@@ -64,7 +60,7 @@ class App extends Component {
 
               {/* Talk details pane */}
               <div id="talk-details" className={detailsClass}>
-                <TalkActions onNext={() => this.props.nextTalk()} onPrevious={() => this.props.previousTalk()} />
+                <TalkActions onNext={nextTalk} onPrevious={previousTalk} nextDisabled={nextDisabled} previousDisabled={previousDisabled} />
                 <TalkDetails talk={selectedTalk} comments={selectedComments} />
               </div>
             </div>
@@ -78,9 +74,8 @@ class App extends Component {
 // Prop validation
 App.propTypes = {
   email: PropTypes.string,
-  selectedIndex: PropTypes.number.isRequired,
-  talks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  comments: PropTypes.object.isRequired,
+  nextDisabled: PropTypes.bool.isRequired,
+  previousDisabled: PropTypes.bool.isRequired,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
@@ -91,12 +86,11 @@ App.propTypes = {
 
 
 function mapStateToProps(state) {
-  const { user: { email }, abstractList: { selectedIndex, talks }, comments } = state;
+  const { user: { email }, abstractList: { nextDisabled, previousDisabled } } = state;
   return {
     email,
-    selectedIndex,
-    talks,
-    comments
+    nextDisabled,
+    previousDisabled
   };
 }
 
