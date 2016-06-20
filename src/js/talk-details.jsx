@@ -24,9 +24,17 @@ function TalkDetails({ talk, comments }) {
     comments = [];
   }
 
+  let authorsList = Object.keys(talk.authors).map(email => talk.authors[email]).join(', ');
+
   return (
     <div id="talk-details-main">
       <GeminiScrollbar>
+        <h3>{talk.title}</h3>
+        <p>
+          <strong>{authorsList}</strong> &#8226; {talk.company}<br />
+          <small><em>{talk.jobtitle}</em></small>
+        </p> 
+
         <p>{talk.body}</p>
         
         <br/>

@@ -4,7 +4,7 @@ import { ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 function TalkActions({ onNext, onPrevious }) {
   return (
     <ButtonToolbar id="talk-actions">
-      <ButtonGroup>
+      <ButtonGroup bsSize="small">
         <Button title="Previous talk" onClick={onPrevious}>
           <Glyphicon glyph="chevron-left" />
         </Button>
@@ -12,7 +12,7 @@ function TalkActions({ onNext, onPrevious }) {
           <Glyphicon glyph="chevron-right" />
         </Button>
       </ButtonGroup>
-      <ButtonGroup className="pull-right">
+      <ButtonGroup bsSize="small" className="pull-right">
         <Button title="Rate NO">
           <Glyphicon glyph="thumbs-down" />
         </Button>

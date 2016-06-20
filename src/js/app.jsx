@@ -1,15 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import { Grid, Row, Col, Nav, NavItem } from 'react-bootstrap';
+import { Nav, NavItem } from 'react-bootstrap';
 
 import { signIn, signOut, nextTalk, previousTalk } from './redux-actions';
 
 import Header from './header';
 import TalkList from './talk-list';
+import TalkListSorting from './talk-list-sorting';
 import TalkDetails from './talk-details';
 import TalkActions from './talk-actions';
-import TalkHeader from './talk-header';
 
 class App extends Component {
   constructor(props) {
@@ -56,17 +55,16 @@ class App extends Component {
               <NavItem eventKey={2} title="Abstract Details">Details</NavItem>
             </Nav>
 
-            <div id="talk-content" className="container-fluid">
+            <div id="talk-content">
               {/* Talk list pane */}
               <div id="talk-list" className={listClass}>
-                <h4>Sorting</h4>
+                <TalkListSorting />
                 <TalkList />
               </div>
 
               {/* Talk details pane */}
               <div id="talk-details" className={detailsClass}>
                 <TalkActions onNext={() => this.props.nextTalk()} onPrevious={() => this.props.previousTalk()} />
-                <TalkHeader talk={selectedTalk} />
                 <TalkDetails talk={selectedTalk} comments={selectedComments} />
               </div>
             </div>

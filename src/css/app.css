@@ -122,14 +122,18 @@ html, body, #cfp-app-wrapper, #cfp-app {
 /**
  * Talk listings table
  */
+#talk-list-sorting {
+  padding: 15px;
+  background-color: #ecf0f1;
+}
+
+#talk-list-sorting > .form-group > select {
+  margin-left: 10px;
+}
 
 #talk-list > .list-group {
-  margin-left: -15px;
-  margin-right: -15px;
-  margin-bottom: 0;
   flex: 1;
   position: relative;
-  border-top: 3px solid #ecf0f1;
 }
 
 #talk-list > .list-group > .gm-scrollbar-container {
@@ -166,24 +170,8 @@ html, body, #cfp-app-wrapper, #cfp-app {
  */
 #talk-actions {
   position: relative;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding-left: 15px;
-}
-
-/**
- * The header of the talk
- */
-#talk-header {
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-right: -15px;
-  border-bottom: 3px solid #ecf0f1;
-}
-
-#talk-header > h3 {
-  margin-top: 0;
-  margin-bottom: 5px;
+  padding: 15px;
+  background-color: #ecf0f1;
 }
 
 /**
@@ -191,7 +179,6 @@ html, body, #cfp-app-wrapper, #cfp-app {
  */
 #talk-details-main {
   position: relative;
-  margin-right: -15px;
 }
 
 #talk-details-main > .gm-scrollbar-container {
@@ -205,6 +192,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
 
 #talk-details-main h3 {
   margin-top: 0;
+  margin-bottom: 5px;
 }
 
 #talk-details-main .label {
