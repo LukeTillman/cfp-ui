@@ -71,7 +71,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
 /* Talk content pane */
 #talk-content {
   flex: 1;
-  margin: 21px 0;
+  margin: 0;
   display: flex;
   flex-flow: row nowrap;
   position: relative;
@@ -104,7 +104,6 @@ html, body, #cfp-app-wrapper, #cfp-app {
 
   #talk-list {
     flex: 1;
-    margin-right: 21px;
   }
 
   #talk-details {
@@ -123,11 +122,6 @@ html, body, #cfp-app-wrapper, #cfp-app {
 /**
  * Talk listings table
  */
-#talk-list {
-  border: 1px solid #ecf0f1;
-  border-radius: 4px;
-  padding: 15px;
-}
 
 #talk-list > .list-group {
   margin-left: -15px;
@@ -135,7 +129,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
   margin-bottom: 0;
   flex: 1;
   position: relative;
-  border-top: 1px solid #ecf0f1;
+  border-top: 3px solid #ecf0f1;
 }
 
 #talk-list > .list-group > .gm-scrollbar-container {
@@ -153,12 +147,43 @@ html, body, #cfp-app-wrapper, #cfp-app {
   margin-bottom: 5px;
 }
 
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  #talk-list {
+    border: none;
+    border-right: 3px solid #ecf0f1; 
+    border-radius: 0;
+  }
+
+  #talk-list > .list-group {
+    margin-right: 0;
+  }
+}
+
+
 /**
  * Take action on a talk
  */
 #talk-actions {
   position: relative;
-  margin-bottom: 21px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-left: 15px;
+}
+
+/**
+ * The header of the talk
+ */
+#talk-header {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: -15px;
+  border-bottom: 3px solid #ecf0f1;
+}
+
+#talk-header > h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
 }
 
 /**
@@ -166,9 +191,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
  */
 #talk-details-main {
   position: relative;
-  margin-bottom: 21px;
-  border: 1px solid #ecf0f1;
-  border-radius: 4px;
+  margin-right: -15px;
 }
 
 #talk-details-main > .gm-scrollbar-container {
@@ -177,6 +200,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
 
 #talk-details-main > .gm-scrollbar-container > .gm-scroll-view {
   padding: 15px;
+  padding-right: 30px;
 }
 
 #talk-details-main h3 {
@@ -204,6 +228,8 @@ html, body, #cfp-app-wrapper, #cfp-app {
   border: 1px solid #ecf0f1;
   border-radius: 4px;
 }
+
+
 
 /**
  * Spinning icons taken from: http://chadkuehn.com/animated-font-spinners/ 

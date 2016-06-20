@@ -9,7 +9,7 @@ import Header from './header';
 import TalkList from './talk-list';
 import TalkDetails from './talk-details';
 import TalkActions from './talk-actions';
-import TalkComment from './talk-comment';
+import TalkHeader from './talk-header';
 
 class App extends Component {
   constructor(props) {
@@ -66,8 +66,8 @@ class App extends Component {
               {/* Talk details pane */}
               <div id="talk-details" className={detailsClass}>
                 <TalkActions onNext={() => this.props.nextTalk()} onPrevious={() => this.props.previousTalk()} />
+                <TalkHeader talk={selectedTalk} />
                 <TalkDetails talk={selectedTalk} comments={selectedComments} />
-                <TalkComment />
               </div>
             </div>
           </div>
