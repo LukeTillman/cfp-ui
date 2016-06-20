@@ -56,20 +56,18 @@ class App extends Component {
               <NavItem eventKey={2} title="Abstract Details">Details</NavItem>
             </Nav>
 
-            <div id="talk-content" className="container">
-              <div id="talk-tab-contents">
-                {/* Talk list pane */}
-                <div id="talk-list" className={listClass}>
-                  <h4>Sorting</h4>
-                  <TalkList />
-                </div>
+            <div id="talk-content" className="container-fluid">
+              {/* Talk list pane */}
+              <div id="talk-list" className={listClass}>
+                <h4>Sorting</h4>
+                <TalkList />
+              </div>
 
-                {/* Talk details pane */}
-                <div id="talk-details" className={detailsClass}>
-                  <TalkActions onNext={() => this.props.nextTalk()} onPrevious={() => this.props.previousTalk()} />
-                  <TalkDetails talk={selectedTalk} comments={selectedComments} />
-                  <TalkComment />
-                </div>
+              {/* Talk details pane */}
+              <div id="talk-details" className={detailsClass}>
+                <TalkActions onNext={() => this.props.nextTalk()} onPrevious={() => this.props.previousTalk()} />
+                <TalkDetails talk={selectedTalk} comments={selectedComments} />
+                <TalkComment />
               </div>
             </div>
           </div>

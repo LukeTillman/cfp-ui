@@ -28,7 +28,7 @@ function Header({ email, signIn, signOut}) {
   }
 
   return (
-    <Navbar fixedTop>
+    <Navbar fixedTop fluid>
       <Navbar.Header>
         <Navbar.Brand>
           <img src={logoImageUrl}/> Presentations Review

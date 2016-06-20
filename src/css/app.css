@@ -73,19 +73,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
   flex: 1;
   margin: 21px 0;
   display: flex;
-  flex-flow: column nowrap;
-  position: relative;
-}
-
-#main-error-alert {
-  margin-bottom: 21px;
-}
-
-#talk-tab-contents {
-  flex: 1;
-  display: flex;
   flex-flow: row nowrap;
-  align-items: stretch;
   position: relative;
 }
 
@@ -104,15 +92,10 @@ html, body, #cfp-app-wrapper, #cfp-app {
   flex: 1;
 }
 
-
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   #mobile-tabs {
     display: none;
-  }
-
-  #talk-content {
-    margin: 21px auto;
   }
 
   .talk-tab-content {
@@ -126,6 +109,13 @@ html, body, #cfp-app-wrapper, #cfp-app {
 
   #talk-details {
     flex: 2;
+  }
+}
+
+/* Large devices (1200px+) */
+@media (min-width: 1200px) {
+  #talk-details {
+    flex: 3;
   }
 }
 
