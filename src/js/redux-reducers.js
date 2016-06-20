@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ActionTypes, SortByValues } from './redux-actions';
+import { ActionTypes, SortByValues, SortDirectionValues } from './redux-actions';
 
 /**
  * User state
@@ -64,6 +64,7 @@ function dataReducer(state = defaultDataState, action) {
 const defaultAbstractListState = {
   selectedIndex: -1,
   sortBy: SortByValues.DEFAULT,
+  sortDirection: SortDirectionValues.ASC,
   nextDisabled: true,
   previousDisabled: true
 };
@@ -89,6 +90,15 @@ function abstractListReducer(state = defaultAbstractListState, action) {
       return {
         ...state,
         sortBy: action.payload
+      };
+    case ActionTypes.TOGGLE_SORT_DIRECTION:
+      let sortDirection = state.sortDirection === SortDirectionValues.ASC 
+        ? SortDirectionValues.DESC
+        : SortDirectionValues.ASC;
+        
+      return {
+        ...state,
+        sortDirection
       };
   }
     

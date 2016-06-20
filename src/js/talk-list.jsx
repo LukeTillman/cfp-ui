@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled } from './redux-actions';
+import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled, SortByValues, SortDirectionValues } from './redux-actions';
+import * as Sorting from './sorting';
 
 /**
  * A stateless component representing a single list item.
@@ -87,16 +88,48 @@ TalkList.propTypes = {
   changePreviousDisabled: PropTypes.func.isRequired
 };
 
+// State selectors
+const userEmailSelector = state => state.user.email;
+
 const sortBySelector = state => state.abstractList.sortBy;
+
+const sortDirectionSelector = state => state.abstractList.sortDirection;
+
 const talkDataSelector = state => state.data.abstractsById;
+
+const talkArraySelector = createSelector(
+  talkDataSelector,
+  talksById => Object.keys(talksById).map(id => talksById[id])
+);
+
+// Sorted talks
 const talksSelector = createSelector(
   sortBySelector,
-  talkDataSelector,
-  (sortBy, talksById) => {
-    // TODO: Sorting
-    return Object.keys(talksById).map(id => talksById[id]);
-  }
-);
+  sortDirectionSelector,
+  talkArraySelector,
+  userEmailSelector,
+  (sortBy, sortDirection, talks, userEmail) => {
+    switch (sortBy) {
+      case SortByValues.TITLE:
+        return talks.slice(0).sort(Sorting.withDirection(sortDirection, Sorting.sortByTitle));
+
+      case SortByValues.AUTHOR:
+        return talks.slice(0).sort(Sorting.withDirection(sortDirection, Sorting.sortByAuthor));
+        
+      case SortByValues.COMPANY:
+        return talks.slice(0).sort(Sorting.withDirection(sortDirection, Sorting.sortByCompany));
+
+      case SortByValues.RATING:
+        if (userEmail !== null)
+          return talks.slice(0).sort(Sorting.withDirection(sortDirection, Sorting.getSortByUserRating(userEmail)));
+
+      case SortByValues.DEFAULT:
+        return sortDirection === SortDirectionValues.ASC ? talks : talks.slice(0).reverse();
+
+      default:
+        throw new Error('Unknown sort by value');
+    }
+  });
 
 const abstractListSelector = state => state.abstractList;
 

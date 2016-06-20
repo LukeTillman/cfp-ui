@@ -1,21 +1,39 @@
 import React, { Component, PropTypes } from 'react';
-import { Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ControlLabel, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
+import { SortByValues, SortDirectionValues } from './redux-actions';
 
-function TalkListSorting() {
+function TalkListSorting({ sortBy, sortDirection, onChange, onDirectionChange }) {
+  let isAscending = sortDirection === SortDirectionValues.ASC;
+
   return (
     <Form inline id="talk-list-sorting">
       <FormGroup bsSize="small">
-        <ControlLabel>Sort</ControlLabel>
-        <FormControl componentClass="select" placeholder="Sort talk list by...">
-          <option value="Default">Default</option>
-          <option value="Title">Title</option>
-          <option value="Author">Author</option>
-          <option value="Title">Company</option>
-          <option value="Rating">Rating</option>
+        <ControlLabel>Sort By</ControlLabel>
+        <FormControl componentClass="select" placeholder="Sort talk list by..." onChange={e => onChange(e.target.value)}>
+          {Object.keys(SortByValues).map(key => {
+            let value = SortByValues[key];
+            let selected = sortBy === value;
+            return <option key={key} value={value}>{value}</option>;
+          })}
         </FormControl>
       </FormGroup>
+      <ButtonGroup bsSize="small">
+        <Button bsStyle={isAscending ? 'primary' : 'default'} disabled={isAscending} title="Sort ASC" onClick={onDirectionChange}>
+          <Glyphicon glyph="sort-by-attributes" />
+        </Button>
+        <Button bsStyle={!isAscending ? 'primary' : 'default'} disabled={!isAscending} title="Sort DESC" onClick={onDirectionChange}>
+          <Glyphicon glyph="sort-by-attributes-alt" />
+        </Button>
+      </ButtonGroup>
     </Form>
   );
 }
+
+TalkListSorting.propTypes = {
+  sortBy: PropTypes.string.isRequired,
+  sortDirection: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onDirectionChange: PropTypes.func.isRequired
+};
 
 export default TalkListSorting;

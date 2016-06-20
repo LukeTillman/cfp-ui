@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem } from 'react-bootstrap';
 
-import { signIn, signOut, nextTalk, previousTalk } from './redux-actions';
+import { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection } from './redux-actions';
 
 import Header from './header';
 import TalkList from './talk-list';
@@ -24,7 +24,10 @@ class App extends Component {
   }
 
   render() {
-    const { email, signIn, signOut, nextTalk, previousTalk, nextDisabled, previousDisabled } = this.props;
+    const { 
+      email, nextDisabled, previousDisabled, sortBy, sortDirection,
+      signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection 
+    } = this.props;
 
     let selectedTalk = null;
     let selectedComments = null;
@@ -54,7 +57,7 @@ class App extends Component {
             <div id="talk-content">
               {/* Talk list pane */}
               <div id="talk-list" className={listClass}>
-                <TalkListSorting />
+                <TalkListSorting sortBy={sortBy} sortDirection={sortDirection} onChange={changeSortBy} onDirectionChange={toggleSortDirection} />
                 <TalkList />
               </div>
 
@@ -76,22 +79,28 @@ App.propTypes = {
   email: PropTypes.string,
   nextDisabled: PropTypes.bool.isRequired,
   previousDisabled: PropTypes.bool.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortDirection: PropTypes.string.isRequired,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
   nextTalk: PropTypes.func.isRequired,
-  previousTalk: PropTypes.func.isRequired
+  previousTalk: PropTypes.func.isRequired,
+  changeSortBy: PropTypes.func.isRequired,
+  toggleSortDirection: PropTypes.func.isRequired
 };
 
 
 function mapStateToProps(state) {
-  const { user: { email }, abstractList: { nextDisabled, previousDisabled } } = state;
+  const { user: { email }, abstractList: { nextDisabled, previousDisabled, sortBy, sortDirection } } = state;
   return {
     email,
     nextDisabled,
-    previousDisabled
+    previousDisabled,
+    sortBy,
+    sortDirection
   };
 }
 
-export default connect(mapStateToProps, { signIn, signOut, nextTalk, previousTalk })(App);
+export default connect(mapStateToProps, { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection })(App);

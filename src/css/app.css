@@ -129,6 +129,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
 
 #talk-list-sorting > .form-group > select {
   margin-left: 10px;
+  margin-right: 10px;
 }
 
 #talk-list > .list-group {

@@ -21,7 +21,8 @@ export const ActionTypes = {
   CHANGE_SELECTION: 'CHANGE_SELECTION',
   CHANGE_SORT_BY: 'CHANGE_SORT_BY',
   CHANGE_NEXT_DISABLED: 'CHANGE_NEXT_DISABLED',
-  CHANGE_PREVIOUS_DISABLED: 'CHANGE_PREVIOUS_DISABLED'
+  CHANGE_PREVIOUS_DISABLED: 'CHANGE_PREVIOUS_DISABLED',
+  TOGGLE_SORT_DIRECTION: 'TOGGLE_SORT_DIRECTION'
 };
 
 /**
@@ -33,6 +34,14 @@ export const SortByValues = {
   AUTHOR: 'Author',
   COMPANY: 'Company',
   RATING: 'Rating'
+};
+
+/**
+ * Available sort directions.
+ */
+export const SortDirectionValues = {
+  ASC: 'ASC',
+  DESC: 'DESC'
 };
 
 /**
@@ -171,6 +180,13 @@ export function changeNextDisabled(val) {
  */
 export function changePreviousDisabled(val) {
   return { type: ActionTypes.CHANGE_PREVIOUS_DISABLED, payload: val };
+};
+
+/**
+ * Toggle the sort direction.
+ */
+export function toggleSortDirection() {
+  return { type: ActionTypes.TOGGLE_SORT_DIRECTION };
 };
 
 /**
