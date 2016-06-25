@@ -24,7 +24,8 @@ module.exports = {
   },
   output: {
     path: Paths.OUT,
-    filename: 'cassandracfp.js'
+    filename: 'cassandracfp.js',
+    publicPath: '/assets/'
   },
   module: {
     loaders: [
