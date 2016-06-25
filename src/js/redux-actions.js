@@ -1,4 +1,5 @@
 import xhr from 'xhr';
+import { ActionTypes as AuthActionTypes, startSignIn, startSignOut } from './auth.js';
 
 // Action type constants
 export const ActionTypes = {
@@ -6,8 +7,8 @@ export const ActionTypes = {
   DISMISS_ERROR: 'DISMISS_ERROR',
 
   // Auth
-  SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT',
+  SIGN_IN: AuthActionTypes.SIGN_IN,
+  SIGN_OUT: AuthActionTypes.SIGN_OUT,
 
   // Loading abstracts
   GET_ABSTRACTS: 'GET_ABSTRACTS',
@@ -66,20 +67,15 @@ export function dismissError() {
 /**
  * Signs a user in.
  */
-export function signIn(email) {
-  return { 
-    type: ActionTypes.SIGN_IN,
-    payload: {
-      email
-    }
-  };
+export function signIn() {
+  return startSignIn;
 };
 
 /**
  * Signs the current user out.
  */
 export function signOut() {
-  return { type: ActionTypes.SIGN_OUT };
+  return startSignOut;
 };
 
 /**
@@ -90,12 +86,8 @@ export function getAbstracts() {
     // Indicate we're loading
     dispatch({ type: ActionTypes.GET_ABSTRACTS });
 
-    let uri = process.env.NODE_ENV === 'production'
-      ? '/abstracts/'
-      : '/sample-data/abstracts.json';
-
     // Make the GET request
-    xhr.get(uri, (err, res, body) => {
+    xhr.get('/api/abstracts/', (err, res, body) => {
       // Error making request?
       if (err) {
         dispatch(createErrorAction(ActionTypes.GET_ABSTRACTS_COMPLETE, err));
@@ -110,7 +102,8 @@ export function getAbstracts() {
       }
 
       // OK, filter out empty abstracts from response
-      let abstracts = JSON.parse(res.body)
+      let abstracts = res.body === null ? [] : JSON.parse(res.body);
+      abstracts = abstracts
         .filter(a => a.upstream_id !== 0)
         .reduce((acc, abstract) => {
           // Index by id
@@ -206,11 +199,7 @@ function getComments(id) {
       meta: { id }
     });
 
-    let uri = process.env.NODE_ENV === 'production'
-      ? `/comments/${id}`
-      : `/sample-data/${id}.json`;
-
-    xhr.get(uri, (err, res, body) => {
+    xhr.get(`/api/comments/${id}`, (err, res, body) => {
       // Error making request?
       if (err) {
         dispatch(createErrorAction(ActionTypes.GET_COMMENTS_COMPLETE, err, { id }));

@@ -8,7 +8,9 @@ const Paths = {
   JS: path.resolve(PROJECT_DIR, 'src/js'),
   CSS: path.resolve(PROJECT_DIR, 'src/css'),
   IMAGES: path.resolve(PROJECT_DIR, 'src/images'),
-  OUT: path.resolve(PROJECT_DIR, 'dist')
+  OUT: path.resolve(PROJECT_DIR, 'dist'),
+  VENDOR: path.resolve(PROJECT_DIR, 'vendor'),
+  SERVER: path.resolve(PROJECT_DIR, 'server')
 };
 
 // Export the webpack config
@@ -20,7 +22,10 @@ module.exports = {
     extensions: [ '', '.js', '.jsx' ],
     root: [
       Paths.JS, Paths.CSS, Paths.IMAGES
-    ]
+    ],
+    alias: {
+      persona$: path.resolve(Paths.VENDOR, 'include.js')
+    }
   },
   output: {
     path: Paths.OUT,
@@ -48,7 +53,10 @@ module.exports = {
         include: Paths.SRC, 
         loader: 'file',
         query: { name: 'images/[name].[ext]' } 
-      }
+      },
+
+      // The persona module from mozilla
+      { test: /include\.js/, loader: `exports?navigator` }
     ]
   },
   plugins: [
@@ -58,5 +66,18 @@ module.exports = {
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV === 'production' ? 'production' : 'development')
       }
     })
-  ]
+  ],
+  // Dev server options when running the watch npm task
+  devServer: {
+    contentBase: Paths.SERVER,
+    proxy: {
+      '/api/*': {
+        // Proxy the current location of the live CFP app
+        target: 'http://52.10.244.14/',
+        rewrite(req) {
+          req.url = req.url.replace(/^\/api/, '');
+        }
+      } 
+    }
+  }
 };

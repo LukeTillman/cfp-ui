@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --progress",
-    "watch": "webpack-dev-server --progress --port 3000 --content-base server/ --inline",
-    "server": "node ./server/server.js"
+    "watch": "webpack-dev-server --progress --port 80 --inline"
   },
   "author": "Luke Tillman <luke@luketillman.com> (http://www.luketillman.com)",
   "license": "Apache-2.0",
@@ -17,13 +16,12 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
     "css-loader": "^0.23.1",
-    "express": "^4.14.0",
+    "exports-loader": "^0.6.3",
     "file-loader": "^0.8.5",
     "http-proxy-middleware": "^0.16.0",
     "redux-logger": "^2.6.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
-    "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
