@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Label } from 'react-bootstrap';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import moment from 'moment';
@@ -15,46 +16,50 @@ function TalkComment({ created, email, body }) {
   );
 }
 
-function TalkDetails({ talk, comments }) {
-  if (talk === null) {
-    return null;
+class TalkDetails extends Component {
+  render() {
+    let { talk, comments } = this.props;
+    
+    if (talk === null) {
+      return null;
+    }
+
+    if (!comments) {
+      comments = [];
+    }
+
+    let authorsList = Object.keys(talk.authors).map(email => talk.authors[email]).join(', ');
+
+    return (
+      <div id="talk-details-main">
+        <GeminiScrollbar>
+          <h3>{talk.title}</h3>
+          <p>
+            <strong>{authorsList}</strong> &#8226; {talk.company}<br />
+            <small><em>{talk.jobtitle}</em></small>
+          </p> 
+
+          <p>{talk.body}</p>
+          
+          <br/>
+
+          <h4>Bio</h4>
+          <p>{talk.bio}</p>
+          
+          <p className="text-right">
+            <Label bsStyle="info">{talk.tracks}</Label>
+          </p>
+
+          <br/>
+
+          <h4>Comments</h4>
+          <ul className="talk-comments list-unstyled">
+            {comments.map(c => <TalkComment {...c} key={c.id} />)}
+          </ul>
+        </GeminiScrollbar>
+      </div>
+    );
   }
-
-  if (!comments) {
-    comments = [];
-  }
-
-  let authorsList = Object.keys(talk.authors).map(email => talk.authors[email]).join(', ');
-
-  return (
-    <div id="talk-details-main">
-      <GeminiScrollbar>
-        <h3>{talk.title}</h3>
-        <p>
-          <strong>{authorsList}</strong> &#8226; {talk.company}<br />
-          <small><em>{talk.jobtitle}</em></small>
-        </p> 
-
-        <p>{talk.body}</p>
-        
-        <br/>
-
-        <h4>Bio</h4>
-        <p>{talk.bio}</p>
-        
-        <p className="text-right">
-          <Label bsStyle="info">{talk.tracks}</Label>
-        </p>
-
-        <br/>
-
-        <h4>Comments</h4>
-        <ul className="talk-comments list-unstyled">
-          {comments.map(c => <TalkComment {...c} key={c.id} />)}
-        </ul>
-      </GeminiScrollbar>
-    </div>
-  );
 }
 
 // Prop validation
@@ -63,4 +68,16 @@ TalkDetails.propTypes = {
   comments: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default TalkDetails;
+function mapStateToProps(state) {
+  let { data: { abstractsById, commentsByAbstractId }, selectedTalkId } = state;
+  if (selectedTalkId === null) {
+    return { talk: null, comments: null };
+  }
+
+  return {
+    talk: abstractsById[selectedTalkId],
+    comments: commentsByAbstractId[selectedTalkId] 
+  };
+}
+
+export default connect(mapStateToProps, {})(TalkDetails);

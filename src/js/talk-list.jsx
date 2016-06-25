@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled, SortByValues, SortDirectionValues } from './redux-actions';
+import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled, showDetails, SortByValues, SortDirectionValues } from './redux-actions';
 import * as Sorting from './sorting';
 
 /**
@@ -57,6 +57,12 @@ class TalkList extends Component {
     if (this.props.selectedIndex !== this.props.talks.length - 1 && this.props.nextDisabled === true) {
       this.props.changeNextDisabled(false);
     }
+
+    // See if the selection changed
+    if (this.props.selectedIndex !== prevProps.selectedIndex && this.props.selectedIndex >= 0) {
+      let talkId = this.props.talks[this.props.selectedIndex].id;
+      this.props.showDetails(talkId);
+    }
   }
 
   render() {
@@ -85,7 +91,8 @@ TalkList.propTypes = {
   getAbstracts: PropTypes.func.isRequired,
   changeSelection: PropTypes.func.isRequired,
   changeNextDisabled: PropTypes.func.isRequired,
-  changePreviousDisabled: PropTypes.func.isRequired
+  changePreviousDisabled: PropTypes.func.isRequired,
+  showDetails: PropTypes.func.isRequired
 };
 
 // State selectors
@@ -142,4 +149,4 @@ const mapStateToProps = createSelector(
 );
 
 
-export default connect(mapStateToProps, { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled })(TalkList);
+export default connect(mapStateToProps, { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled, showDetails })(TalkList);

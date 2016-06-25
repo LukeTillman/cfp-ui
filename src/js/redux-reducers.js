@@ -122,6 +122,14 @@ function errorMessageReducer(state = defaultErrorMessageState, action) {
   return state;
 }
 
+const defaultSelectedTalkIdState = null;
+function selectedTalkIdReducer(state = defaultSelectedTalkIdState, action) {
+  if (action.type === ActionTypes.SHOW_DETAILS) {
+    return action.payload;
+  }
+  return state;
+}
+
 /**
  * The root reducer function
  */
@@ -129,7 +137,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   data: dataReducer,
   abstractList: abstractListReducer,
-  errorMessage: errorMessageReducer
+  errorMessage: errorMessageReducer,
+  selectedTalkId: selectedTalkIdReducer
 });
 
 export default rootReducer;

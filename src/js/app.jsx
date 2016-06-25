@@ -29,9 +29,6 @@ class App extends Component {
       signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection 
     } = this.props;
 
-    let selectedTalk = null;
-    let selectedComments = null;
-
     let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
     switch (this.state.activeTab) {
       case 1:
@@ -64,7 +61,7 @@ class App extends Component {
               {/* Talk details pane */}
               <div id="talk-details" className={detailsClass}>
                 <TalkActions onNext={nextTalk} onPrevious={previousTalk} nextDisabled={nextDisabled} previousDisabled={previousDisabled} />
-                <TalkDetails talk={selectedTalk} comments={selectedComments} />
+                <TalkDetails />
               </div>
             </div>
           </div>
@@ -88,7 +85,8 @@ App.propTypes = {
   nextTalk: PropTypes.func.isRequired,
   previousTalk: PropTypes.func.isRequired,
   changeSortBy: PropTypes.func.isRequired,
-  toggleSortDirection: PropTypes.func.isRequired
+  toggleSortDirection: PropTypes.func.isRequired,
+  showDetails: PropTypes.func.isRequired
 };
 
 

@@ -23,7 +23,10 @@ export const ActionTypes = {
   CHANGE_SORT_BY: 'CHANGE_SORT_BY',
   CHANGE_NEXT_DISABLED: 'CHANGE_NEXT_DISABLED',
   CHANGE_PREVIOUS_DISABLED: 'CHANGE_PREVIOUS_DISABLED',
-  TOGGLE_SORT_DIRECTION: 'TOGGLE_SORT_DIRECTION'
+  TOGGLE_SORT_DIRECTION: 'TOGGLE_SORT_DIRECTION',
+
+  // Show a talk's details
+  SHOW_DETAILS: 'SHOW_DETAILS'
 };
 
 /**
@@ -188,8 +191,8 @@ export function toggleSortDirection() {
 function getComments(id) {
   return function getCommentsImpl(dispatch, getState) {
     // See if we already have the comments for the given abstract id loaded
-    let { comments } = getState();
-    if (comments[id]) {
+    let { data: { commentsByAbstractId } } = getState();
+    if (commentsByAbstractId[id]) {
       return;
     }
 

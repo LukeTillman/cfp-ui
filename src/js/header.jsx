@@ -19,7 +19,7 @@ function Header({ email, signIn, signOut}) {
     );
 
     userComponent = (
-      <NavDropdown title={dropdownTitle}>
+      <NavDropdown title={dropdownTitle} id="logged-in-menu">
         <MenuItem onSelect={e => signOut()}>Sign Out</MenuItem>
       </NavDropdown>
     );
