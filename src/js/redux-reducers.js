@@ -6,16 +6,22 @@ import { ActionTypes, SortByValues, SortDirectionValues } from './redux-actions'
  */
 
 const defaultUserState = { email: null };
+const initialEmail = window.sessionStorage.getItem('email');
+if (initialEmail) {
+  defaultUserState.email = initialEmail;
+}
 
 function userReducer(state = defaultUserState, action) {
   switch (action.type) {
     case ActionTypes.SIGN_IN:
+      window.sessionStorage.setItem('email', action.payload.email);
       return {
         ...state,
         email: action.payload.email
       };
 
     case ActionTypes.SIGN_OUT:
+      window.sessionStorage.removeItem('email');
       return {
         ...state,
         email: null

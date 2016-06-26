@@ -1,5 +1,5 @@
 import xhr from 'xhr';
-import { ActionTypes as AuthActionTypes, startSignIn, startSignOut } from './auth.js';
+import navigator from 'persona';
 
 // Action type constants
 export const ActionTypes = {
@@ -7,8 +7,8 @@ export const ActionTypes = {
   DISMISS_ERROR: 'DISMISS_ERROR',
 
   // Auth
-  SIGN_IN: AuthActionTypes.SIGN_IN,
-  SIGN_OUT: AuthActionTypes.SIGN_OUT,
+  SIGN_IN: 'SIGN_IN',
+  SIGN_OUT: 'SIGN_OUT',
 
   // Loading abstracts
   GET_ABSTRACTS: 'GET_ABSTRACTS',
@@ -75,14 +75,56 @@ export function dismissError() {
  * Signs a user in.
  */
 export function signIn() {
-  return startSignIn;
+  return function signInImpl(dispatch) {
+    navigator.id.get(assertion => {
+      let loginOpts = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `assertion=${encodeURIComponent(assertion)}`
+      };
+
+      // Post the assertion to the login handler on the server
+      xhr.post('/api/login', loginOpts, (err, res, body) => {
+        // TODO: dispatch error?
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        if (res.statusCode !== 200) {
+          return;
+        }
+
+        let { email } = JSON.parse(res.body);
+        dispatch({ 
+          type: ActionTypes.SIGN_IN,
+          payload: { email }
+        });
+      });
+    }, { siteName: 'Cassandra Summit 2016 CFP Review' });
+  };
 };
 
 /**
  * Signs the current user out.
  */
 export function signOut() {
-  return startSignOut;
+  return function signOutImpl(dispatch) {
+    // Hit the logout handler on the server
+    xhr.post('/api/logout', (err, res, body) => {
+      // TODO: dispatch error?
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (res.statusCode !== 200) {
+        return;
+      }
+
+      dispatch({ type: ActionTypes.SIGN_OUT });
+    });
+  };
 };
 
 /**
