@@ -52,6 +52,9 @@ function dataReducer(state = defaultDataState, action) {
           [action.meta.id]: action.payload
         }
       };
+      
+    case ActionTypes.SIGN_OUT:
+      return defaultDataState;
   }
 
   return state;
@@ -100,6 +103,9 @@ function abstractListReducer(state = defaultAbstractListState, action) {
         ...state,
         sortDirection
       };
+    
+    case ActionTypes.SIGN_OUT:
+      return defaultAbstractListState;
   }
     
   return state;
@@ -116,6 +122,7 @@ function errorMessageReducer(state = defaultErrorMessageState, action) {
       break;
 
     case ActionTypes.DISMISS_ERROR:
+    case ActionTypes.SIGN_OUT:
       return defaultErrorMessageState;
   }
 
@@ -124,9 +131,13 @@ function errorMessageReducer(state = defaultErrorMessageState, action) {
 
 const defaultSelectedTalkIdState = null;
 function selectedTalkIdReducer(state = defaultSelectedTalkIdState, action) {
-  if (action.type === ActionTypes.SHOW_DETAILS) {
-    return action.payload;
+  switch (action.type) {
+    case ActionTypes.SHOW_DETAILS:
+      return action.payload;
+    case ActionTypes.SIGN_OUT:
+      return defaultSelectedTalkIdState;
   }
+
   return state;
 }
 

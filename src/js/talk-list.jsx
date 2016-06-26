@@ -10,10 +10,11 @@ import * as Sorting from './sorting';
 /**
  * A stateless component representing a single list item.
  */
-function TalkListItem({ id, title, authors, company, active, onClick }) {
+function TalkListItem({ id, title, authors, company, active, rated, onClick }) {
   let authorsList = Object.keys(authors).map(email => authors[email]).join(', ');
+  let className = rated ? 'text-muted' : undefined;
   return (
-    <ListGroupItem onClick={onClick} active={active}>
+    <ListGroupItem onClick={onClick} active={active} className={className}>
       <h5>{title}</h5>
       <small>{authorsList}</small><br/>
       <small className="text-muted">{company}</small>
@@ -36,8 +37,10 @@ TalkListItem.propTypes = {
  */
 class TalkList extends Component {
   componentDidMount() {
-    // Load abstracts
-    this.props.getAbstracts();
+    // Load abstracts if logged in
+    if (this.props.email) {
+      this.props.getAbstracts();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -63,16 +66,29 @@ class TalkList extends Component {
       let talkId = this.props.talks[this.props.selectedIndex].id;
       this.props.showDetails(talkId);
     }
+
+    // See if someone has logged in
+    let hasEmail = !!this.props.email;
+    let hadEmail = !!prevProps.email;
+    if (hasEmail && !hadEmail) {
+      this.props.getAbstracts();
+    }
   }
 
   render() {
-    let { talks, selectedIndex } = this.props;
+    let { talks, selectedIndex, email } = this.props;
+
+    if (!email) {
+      return null;
+    }
+
     return (
       <ListGroup>
         <GeminiScrollbar>
           {talks.map((t, idx) => {
             let active = selectedIndex === idx;
-            return <TalkListItem {...t} key={t.id} active={active} onClick={() => this.props.changeSelection(idx)} />
+            let rated = t.scores_a && !!t.scores_a[email];
+            return <TalkListItem {...t} key={t.id} active={active} rated={rated} onClick={() => this.props.changeSelection(idx)} />
           })}
         </GeminiScrollbar>
       </ListGroup>
@@ -86,6 +102,7 @@ TalkList.propTypes = {
   selectedIndex: PropTypes.number.isRequired,
   nextDisabled: PropTypes.bool.isRequired,
   previousDisabled: PropTypes.bool.isRequired,
+  email: PropTypes.string,
 
   // Action creators
   getAbstracts: PropTypes.func.isRequired,
@@ -143,8 +160,9 @@ const abstractListSelector = state => state.abstractList;
 const mapStateToProps = createSelector(
   abstractListSelector,
   talksSelector,
-  (abstractList, talks) => {
-    return { ...abstractList, talks };
+  userEmailSelector,
+  (abstractList, talks, email) => {
+    return { ...abstractList, talks, email };
   }
 );
 

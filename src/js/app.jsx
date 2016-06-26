@@ -25,7 +25,7 @@ class App extends Component {
 
   render() {
     const { 
-      email, nextDisabled, previousDisabled, sortBy, sortDirection,
+      email, nextDisabled, previousDisabled, sortBy, sortDirection, data, selectedTalkId,
       signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection 
     } = this.props;
 
@@ -37,6 +37,13 @@ class App extends Component {
       case 2:
         detailsClass += ' active';
         break;
+    }
+
+    let talk = null;
+    let comments = null;
+    if (selectedTalkId !== null) {
+      talk = data.abstractsById[selectedTalkId];
+      comments = data.commentsByAbstractId[selectedTalkId];
     }
 
     return (
@@ -60,8 +67,8 @@ class App extends Component {
 
               {/* Talk details pane */}
               <div id="talk-details" className={detailsClass}>
-                <TalkActions onNext={nextTalk} onPrevious={previousTalk} nextDisabled={nextDisabled} previousDisabled={previousDisabled} />
-                <TalkDetails />
+                <TalkActions talk={talk} email={email} onNext={nextTalk} onPrevious={previousTalk} nextDisabled={nextDisabled} previousDisabled={previousDisabled} />
+                <TalkDetails talk={talk} comments={comments} />
               </div>
             </div>
           </div>
@@ -78,6 +85,8 @@ App.propTypes = {
   previousDisabled: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortDirection: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
+  selectedTalkId: PropTypes.string,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
@@ -85,19 +94,20 @@ App.propTypes = {
   nextTalk: PropTypes.func.isRequired,
   previousTalk: PropTypes.func.isRequired,
   changeSortBy: PropTypes.func.isRequired,
-  toggleSortDirection: PropTypes.func.isRequired,
-  showDetails: PropTypes.func.isRequired
+  toggleSortDirection: PropTypes.func.isRequired
 };
 
 
 function mapStateToProps(state) {
-  const { user: { email }, abstractList: { nextDisabled, previousDisabled, sortBy, sortDirection } } = state;
+  const { user: { email }, abstractList: { nextDisabled, previousDisabled, sortBy, sortDirection }, data, selectedTalkId } = state;
   return {
     email,
     nextDisabled,
     previousDisabled,
     sortBy,
-    sortDirection
+    sortDirection,
+    data,
+    selectedTalkId
   };
 }
 

@@ -18,7 +18,11 @@ function signIn(email) {
 }
 
 function signOut() {
-  return { type: ActionTypes.SIGN_OUT };
+  return function signOutImpl(dispatch, getState) {
+    let { user: { email } } = getState();
+    if (email === null) return;
+    dispatch({ type: ActionTypes.SIGN_OUT });  
+  };
 }
 
 // Setup listeners
