@@ -48,11 +48,17 @@ export function sortByAuthor(a, b) {
  */
 export function getSortByUserRating(userEmail) {
   return function sortByRating(a, b) {
-    let aScore = a.scores_a ? a.scores_a[userEmail] : undefined;
-    let bScore = b.scores_a ? a.scores_a[userEmail] : undefined;
-    if (!aScore && !bScore) return 0;
-    if (!aScore || aScore < bScore) return -1;
-    if (!bScore || bScore < aScore) return 1;
+    let aScore = 0;
+    if (a.scores_a && a.scores_a[userEmail]) {
+      aScore = a.scores_a[userEmail];
+    }
+    let bScore = 0;
+    if (b.scores_a && b.scores_a[userEmail]) {
+      bScore = b.scores_a[userEmail];
+    }
+    
+    if (aScore < bScore) return -1;
+    if (bScore < aScore) return 1;
     return 0;
   };
 };

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem } from 'react-bootstrap';
 
-import { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection } from './redux-actions';
+import { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate } from './redux-actions';
 
 import Header from './header';
 import TalkList from './talk-list';
@@ -26,7 +26,7 @@ class App extends Component {
   render() {
     const { 
       email, nextDisabled, previousDisabled, sortBy, sortDirection, data, selectedTalkId,
-      signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection 
+      signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate
     } = this.props;
 
     let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
@@ -67,7 +67,8 @@ class App extends Component {
 
               {/* Talk details pane */}
               <div id="talk-details" className={detailsClass}>
-                <TalkActions talk={talk} email={email} onNext={nextTalk} onPrevious={previousTalk} nextDisabled={nextDisabled} previousDisabled={previousDisabled} />
+                <TalkActions talk={talk} email={email} onNext={nextTalk} onPrevious={previousTalk} nextDisabled={nextDisabled} 
+                             previousDisabled={previousDisabled} onRateClick={rate} />
                 <TalkDetails talk={talk} comments={comments} />
               </div>
             </div>
@@ -94,7 +95,8 @@ App.propTypes = {
   nextTalk: PropTypes.func.isRequired,
   previousTalk: PropTypes.func.isRequired,
   changeSortBy: PropTypes.func.isRequired,
-  toggleSortDirection: PropTypes.func.isRequired
+  toggleSortDirection: PropTypes.func.isRequired,
+  rate: PropTypes.func.isRequired
 };
 
 
@@ -111,4 +113,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection })(App);
+export default connect(mapStateToProps, { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate })(App);

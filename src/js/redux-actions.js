@@ -254,7 +254,7 @@ export function hideDetails() {
 export function rate(rating) {
   return function rateImpl(dispatch, getState) {
     let { user: { email }, selectedTalkId } = getState();
-    if (!!email) return;
+    if (!email) return;
 
     let scoresOpts = {
       json: [ { id: selectedTalkId, slot: 'scores_a', email, score: rating } ]

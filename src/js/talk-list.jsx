@@ -83,10 +83,21 @@ class TalkList extends Component {
       this.props.changeNextDisabled(false);
     }
 
+    // If the talks change, we may need to correct the selectedIndex
+    if (this.props.talks !== prevProps.talks && this.props.selectedIndex >= 0) {
+      let talkId = this.props.talks[this.props.selectedIndex].id;
+      if (talkId !== this.props.selectedTalkId) {
+        let newIndex = this.props.talks.findIndex(t => t.id === this.props.selectedTalkId);
+        this.props.changeSelection(newIndex);
+      }
+    }
+
     // See if the selection changed
     if (this.props.selectedIndex !== prevProps.selectedIndex && this.props.selectedIndex >= 0) {
       let talkId = this.props.talks[this.props.selectedIndex].id;
-      this.props.showDetails(talkId);
+      if (talkId !== this.props.selectedTalkId) {
+        this.props.showDetails(talkId);
+      }
     }
 
     // See if someone has logged in
@@ -127,6 +138,7 @@ TalkList.propTypes = {
   selectedIndex: PropTypes.number.isRequired,
   nextDisabled: PropTypes.bool.isRequired,
   previousDisabled: PropTypes.bool.isRequired,
+  selectedTalkId: PropTypes.string,
   email: PropTypes.string,
 
   // Action creators
@@ -182,12 +194,15 @@ const talksSelector = createSelector(
 
 const abstractListSelector = state => state.abstractList;
 
+const selectedTalkIdSelector = state => state.selectedTalkId;
+
 const mapStateToProps = createSelector(
   abstractListSelector,
   talksSelector,
   userEmailSelector,
-  (abstractList, talks, email) => {
-    return { ...abstractList, talks, email };
+  selectedTalkIdSelector,
+  (abstractList, talks, email, selectedTalkId) => {
+    return { ...abstractList, talks, email, selectedTalkId };
   }
 );
 

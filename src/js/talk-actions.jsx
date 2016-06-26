@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 
-function TalkActions({ talk, email, onNext, onPrevious, nextDisabled, previousDisabled }) {
+function TalkActions({ talk, email, onNext, onPrevious, nextDisabled, previousDisabled, onRateClick }) {
   let rating = undefined;
   let loggedIn = !!email;
   let talkSelected = !!talk;
@@ -20,13 +20,13 @@ function TalkActions({ talk, email, onNext, onPrevious, nextDisabled, previousDi
         </Button>
       </ButtonGroup>
       <ButtonGroup bsSize="small" className="pull-right">
-        <Button title="Rate NO" bsStyle={rating === 1 ? 'primary' : 'default'} disabled={!loggedIn || !talkSelected || rating === 1}>
+        <Button title="Rate NO" bsStyle={rating === 1 ? 'primary' : 'default'} disabled={!loggedIn || !talkSelected || rating === 1} onClick={() => onRateClick(1)}>
           <Glyphicon glyph="thumbs-down" />
         </Button>
-        <Button title="Rate MAYBE" bsStyle={rating === 2 ? 'primary' : 'default'} disabled={!loggedIn || !talkSelected || rating === 2}>
+        <Button title="Rate MAYBE" bsStyle={rating === 2 ? 'primary' : 'default'} disabled={!loggedIn || !talkSelected || rating === 2} onClick={() => onRateClick(2)}>
           <Glyphicon glyph="question-sign" />
         </Button>
-        <Button title="Rate YES" bsStyle={rating === 3 ? 'primary' : 'default'} disabled={!loggedIn || !talkSelected || rating === 3}>
+        <Button title="Rate YES" bsStyle={rating === 3 ? 'primary' : 'default'} disabled={!loggedIn || !talkSelected || rating === 3} onClick={() => onRateClick(3)}>
           <Glyphicon glyph="thumbs-up" />
         </Button>
       </ButtonGroup>
@@ -35,10 +35,13 @@ function TalkActions({ talk, email, onNext, onPrevious, nextDisabled, previousDi
 }
 
 TalkActions.propTypes = {
+  talk: PropTypes.object,
+  email: PropTypes.string,
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
   nextDisabled: PropTypes.bool.isRequired,
-  previousDisabled: PropTypes.bool.isRequired
+  previousDisabled: PropTypes.bool.isRequired,
+  onRateClick: PropTypes.func.isRequired
 };
 
 export default TalkActions;
