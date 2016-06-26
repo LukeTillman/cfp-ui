@@ -135,6 +135,7 @@ html, body, #cfp-app-wrapper, #cfp-app {
 #talk-list > .list-group {
   flex: 1;
   position: relative;
+  margin-bottom: 0;
 }
 
 #talk-list > .list-group > .gm-scrollbar-container {
@@ -152,14 +153,10 @@ html, body, #cfp-app-wrapper, #cfp-app {
   margin-bottom: 5px;
 }
 
-#talk-list .list-group-item.talk-rated > h5,
-#talk-list .list-group-item.talk-rated > small {
-  opacity: 0.5;
-}
-
-#talk-list .list-group-item.talk-rated.active > h5,
-#talk-list .list-group-item.talk-rated.active > small {
-  opacity: 1;
+#talk-list-stats {
+  padding: 15px;
+  background-color: #ecf0f1;
+  margin-bottom: 0;
 }
 
 /* Small devices (tablets, 768px and up) */

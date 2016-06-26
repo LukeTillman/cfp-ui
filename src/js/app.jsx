@@ -7,6 +7,7 @@ import { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirect
 import Header from './header';
 import TalkList from './talk-list';
 import TalkListSorting from './talk-list-sorting';
+import TalkListStats from './talk-list-stats';
 import TalkDetails from './talk-details';
 import TalkActions from './talk-actions';
 
@@ -63,6 +64,7 @@ class App extends Component {
               <div id="talk-list" className={listClass}>
                 <TalkListSorting sortBy={sortBy} sortDirection={sortDirection} onChange={changeSortBy} onDirectionChange={toggleSortDirection} />
                 <TalkList />
+                <TalkListStats abstractsById={data.abstractsById} email={email} />
               </div>
 
               {/* Talk details pane */}
