@@ -147,9 +147,19 @@ html, body, #cfp-app-wrapper, #cfp-app {
   border-radius: 0px;
 }
 
-#talk-list .list-group-item h5 {
+#talk-list .list-group-item > h5 {
   margin-top: 0;
   margin-bottom: 5px;
+}
+
+#talk-list .list-group-item.talk-rated > h5,
+#talk-list .list-group-item.talk-rated > small {
+  opacity: 0.5;
+}
+
+#talk-list .list-group-item.talk-rated.active > h5,
+#talk-list .list-group-item.talk-rated.active > small {
+  opacity: 1;
 }
 
 /* Small devices (tablets, 768px and up) */

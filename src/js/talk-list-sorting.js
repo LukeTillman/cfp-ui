@@ -19,10 +19,10 @@ function TalkListSorting({ sortBy, sortDirection, onChange, onDirectionChange })
       </FormGroup>
       <ButtonGroup bsSize="small">
         <Button bsStyle={isAscending ? 'primary' : 'default'} disabled={isAscending} title="Sort ASC" onClick={onDirectionChange}>
-          <Glyphicon glyph="sort-by-attributes" />
+          <Glyphicon glyph="arrow-up" />
         </Button>
         <Button bsStyle={!isAscending ? 'primary' : 'default'} disabled={!isAscending} title="Sort DESC" onClick={onDirectionChange}>
-          <Glyphicon glyph="sort-by-attributes-alt" />
+          <Glyphicon glyph="arrow-down" />
         </Button>
       </ButtonGroup>
     </Form>

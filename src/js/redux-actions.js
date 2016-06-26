@@ -26,7 +26,11 @@ export const ActionTypes = {
   TOGGLE_SORT_DIRECTION: 'TOGGLE_SORT_DIRECTION',
 
   // Show a talk's details
-  SHOW_DETAILS: 'SHOW_DETAILS'
+  SHOW_DETAILS: 'SHOW_DETAILS',
+
+  // Rate a talk or leave a comment
+  RATE: 'RATE',
+  COMMENT: 'COMMENT'
 };
 
 /**
@@ -242,4 +246,35 @@ export function showDetails(id) {
  */
 export function hideDetails() {
   return { type: ActionTypes.HIDE_DETAILS };
+};
+
+/**
+ * Rate the currently selected talk.
+ */
+export function rate(rating) {
+  return function rateImpl(dispatch, getState) {
+    let { user: { email }, selectedTalkId } = getState();
+    if (!!email) return;
+
+    let scoresOpts = {
+      json: [ { id: selectedTalkId, slot: 'scores_a', email, score: rating } ]
+    };
+    xhr.post('/api/updatescores', scoresOpts, (err, res, body) => {
+      if (err) {
+        dispatch(createErrorAction(ActionTypes.RATE, err));
+        return;
+      }
+
+      if (res.statusCode !== 200) {
+        dispatch(createErrorAction(ActionTypes.RATE, new Error('Unexpected error while rating talk')));
+        return;
+      }
+
+      dispatch({
+        type: ActionTypes.RATE,
+        payload: { [email]: rating },
+        meta: { id: selectedTalkId }
+      });
+    });
+  };
 };

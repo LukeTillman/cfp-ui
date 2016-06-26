@@ -52,7 +52,22 @@ function dataReducer(state = defaultDataState, action) {
           [action.meta.id]: action.payload
         }
       };
-      
+
+    case ActionTypes.RATE:
+      return {
+        ...state,
+        abstractsById: {
+          ...state.abstractsById,
+          [action.meta.id]: {
+            ...state.abstractsById[action.meta.id],
+            scores_a: {
+              ...state.abstractsById[action.meta.id].scores_a,
+              ...action.payload
+            }
+          }
+        }
+      };
+
     case ActionTypes.SIGN_OUT:
       return defaultDataState;
   }

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Row, Col, ListGroup, ListGroupItem, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import GeminiScrollbar from 'react-gemini-scrollbar';
@@ -10,13 +10,35 @@ import * as Sorting from './sorting';
 /**
  * A stateless component representing a single list item.
  */
-function TalkListItem({ id, title, authors, company, active, rated, onClick }) {
+function TalkListItem({ id, title, authors, company, active, rating, onClick }) {
   let authorsList = Object.keys(authors).map(email => authors[email]).join(', ');
-  let className = rated ? 'text-muted' : undefined;
+  let className, indicatorEl;
+  if(rating > 0) {
+    className = 'talk-rated';
+    let glyph, glyphClass;
+    switch (rating) {
+      case 1:
+        glyphClass = 'text-danger';
+        glyph = 'thumbs-down'
+        break;
+      case 2:
+        glyphClass = 'text-info';
+        glyph = 'question-sign';
+        break;
+      case 3:
+        glyphClass = 'text-success';
+        glyph = 'thumbs-up';
+        break;
+    }
+    
+    indicatorEl = <small className="pull-right"><Glyphicon glyph={glyph} className={glyphClass} /></small>
+  }
+
   return (
     <ListGroupItem onClick={onClick} active={active} className={className}>
       <h5>{title}</h5>
       <small>{authorsList}</small><br/>
+      {indicatorEl}
       <small className="text-muted">{company}</small>
     </ListGroupItem>
   );
@@ -87,8 +109,11 @@ class TalkList extends Component {
         <GeminiScrollbar>
           {talks.map((t, idx) => {
             let active = selectedIndex === idx;
-            let rated = t.scores_a && !!t.scores_a[email];
-            return <TalkListItem {...t} key={t.id} active={active} rated={rated} onClick={() => this.props.changeSelection(idx)} />
+            let rating = 0;
+            if (t.scores_a && t.scores_a[email]) {
+              rating = t.scores_a[email];
+            }
+            return <TalkListItem {...t} key={t.id} active={active} rating={rating} onClick={() => this.props.changeSelection(idx)} />
           })}
         </GeminiScrollbar>
       </ListGroup>
