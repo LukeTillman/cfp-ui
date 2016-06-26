@@ -13,9 +13,33 @@ const Paths = {
   SERVER: path.resolve(PROJECT_DIR, 'server')
 };
 
+// Create source maps by default
+let devtool = 'source-map';
+
+// Create array of plugins
+const plugins = [
+  // Define process.env.NODE_ENV in the app based on the setting during the build
+  new webpack.DefinePlugin({
+    'process.env': {
+      'NODE_ENV': JSON.stringify(process.env.NODE_ENV === 'production' ? 'production' : 'development')
+    }
+  })
+];
+
+if (process.env.NODE_ENV === 'production') {
+  // Minify and remove dead code with uglify
+  plugins.push(new webpack.optimize.UglifyJsPlugin({
+    compress: { warnings: false },
+    screw_ie8: true
+  }));
+
+  // No source maps
+  devtool = undefined;
+}
+
 // Export the webpack config
 module.exports = {
-  devtool: 'source-map',
+  devtool,
   context: Paths.SRC,
   entry: './index.jsx',
   resolve: {
@@ -59,14 +83,10 @@ module.exports = {
       { test: /include\.js/, loader: `exports?navigator` }
     ]
   },
-  plugins: [
-    // Define process.env.NODE_ENV in the app based on the setting during the build
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(process.env.NODE_ENV === 'production' ? 'production' : 'development')
-      }
-    })
-  ],
+
+  // Use plugins defined above
+  plugins,
+
   // Dev server options when running the watch npm task
   devServer: {
     contentBase: Paths.SERVER,
