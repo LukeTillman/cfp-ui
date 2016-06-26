@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled, showDetails, SortByValues, SortDirectionValues } from './redux-actions';
+import { getAbstracts, changeSelection, changeNextDisabled, changePreviousDisabled, showDetails, SortByValues, SortDirectionValues, MobileTabs } from './redux-actions';
 import * as Sorting from './sorting';
 
 /**
@@ -106,6 +106,12 @@ class TalkList extends Component {
     if (hasEmail && !hadEmail) {
       this.props.getAbstracts();
     }
+
+    // See if we just switched to the list tab in mobile
+    if (this.props.mobileTab !== prevProps.mobileTab && this.props.mobileTab === MobileTabs.LIST) {
+      // Force scrollbar to recalculate its size
+      this.refs.gemini.scrollbar.update();
+    }
   }
 
   render() {
@@ -117,7 +123,7 @@ class TalkList extends Component {
 
     return (
       <ListGroup>
-        <GeminiScrollbar>
+        <GeminiScrollbar ref="gemini">
           {talks.map((t, idx) => {
             let active = selectedIndex === idx;
             let rating = 0;
@@ -140,6 +146,7 @@ TalkList.propTypes = {
   previousDisabled: PropTypes.bool.isRequired,
   selectedTalkId: PropTypes.string,
   email: PropTypes.string,
+  mobileTab: PropTypes.number.isRequired,
 
   // Action creators
   getAbstracts: PropTypes.func.isRequired,
@@ -196,13 +203,16 @@ const abstractListSelector = state => state.abstractList;
 
 const selectedTalkIdSelector = state => state.selectedTalkId;
 
+const mobileTabSelector = state => state.mobileTab;
+
 const mapStateToProps = createSelector(
   abstractListSelector,
   talksSelector,
   userEmailSelector,
   selectedTalkIdSelector,
-  (abstractList, talks, email, selectedTalkId) => {
-    return { ...abstractList, talks, email, selectedTalkId };
+  mobileTabSelector,
+  (abstractList, talks, email, selectedTalkId, mobileTab) => {
+    return { ...abstractList, talks, email, selectedTalkId, mobileTab };
   }
 );
 

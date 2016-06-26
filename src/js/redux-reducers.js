@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ActionTypes, SortByValues, SortDirectionValues } from './redux-actions';
+import { ActionTypes, SortByValues, SortDirectionValues, MobileTabs } from './redux-actions';
 
 /**
  * User state
@@ -162,6 +162,16 @@ function selectedTalkIdReducer(state = defaultSelectedTalkIdState, action) {
   return state;
 }
 
+const defaultMobileTabState = MobileTabs.LIST;
+function mobileTabReducer(state = defaultMobileTabState, action) {
+  switch(action.type) {
+    case ActionTypes.CHANGE_MOBILE_TAB:
+      return action.payload;
+  }
+
+  return state;
+}
+
 /**
  * The root reducer function
  */
@@ -170,7 +180,8 @@ const rootReducer = combineReducers({
   data: dataReducer,
   abstractList: abstractListReducer,
   errorMessage: errorMessageReducer,
-  selectedTalkId: selectedTalkIdReducer
+  selectedTalkId: selectedTalkIdReducer,
+  mobileTab: mobileTabReducer
 });
 
 export default rootReducer;

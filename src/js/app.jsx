@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem } from 'react-bootstrap';
 
-import { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate } from './redux-actions';
+import { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate, changeMobileTab, MobileTabs } from './redux-actions';
 
 import Header from './header';
 import TalkList from './talk-list';
@@ -12,30 +12,18 @@ import TalkDetails from './talk-details';
 import TalkActions from './talk-actions';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      activeTab: 1
-    };
-  }
-
-  tabSelected(eventKey) {
-    this.setState({ activeTab: eventKey });
-  }
-
   render() {
     const { 
-      email, nextDisabled, previousDisabled, sortBy, sortDirection, data, selectedTalkId,
-      signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate
+      email, nextDisabled, previousDisabled, sortBy, sortDirection, data, selectedTalkId, mobileTab,
+      signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate, changeMobileTab
     } = this.props;
 
     let listClass = 'talk-tab-content', detailsClass = 'talk-tab-content';
-    switch (this.state.activeTab) {
-      case 1:
+    switch (mobileTab) {
+      case MobileTabs.LIST:
         listClass += ' active';
         break;
-      case 2:
+      case MobileTabs.DETAILS:
         detailsClass += ' active';
         break;
     }
@@ -54,9 +42,9 @@ class App extends Component {
         <div id="main-content-wrapper">
           <div id="main-content">
             {/* Tabs only visible on mobile */}
-            <Nav bsStyle="pills" id="mobile-tabs" activeKey={this.state.activeTab} onSelect={eventKey => this.tabSelected(eventKey)}>
-              <NavItem eventKey={1} title="Abstract List">List</NavItem>
-              <NavItem eventKey={2} title="Abstract Details">Details</NavItem>
+            <Nav bsStyle="pills" id="mobile-tabs" activeKey={mobileTab} onSelect={eventKey => changeMobileTab(eventKey)}>
+              <NavItem eventKey={MobileTabs.LIST} title="Abstract List">List</NavItem>
+              <NavItem eventKey={MobileTabs.DETAILS} title="Abstract Details">Details</NavItem>
             </Nav>
 
             <div id="talk-content">
@@ -90,6 +78,7 @@ App.propTypes = {
   sortDirection: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
   selectedTalkId: PropTypes.string,
+  mobileTab: PropTypes.number.isRequired,
 
   // Action creators
   signIn: PropTypes.func.isRequired,
@@ -98,12 +87,13 @@ App.propTypes = {
   previousTalk: PropTypes.func.isRequired,
   changeSortBy: PropTypes.func.isRequired,
   toggleSortDirection: PropTypes.func.isRequired,
-  rate: PropTypes.func.isRequired
+  rate: PropTypes.func.isRequired,
+  changeMobileTab: PropTypes.func.isRequired
 };
 
 
 function mapStateToProps(state) {
-  const { user: { email }, abstractList: { nextDisabled, previousDisabled, sortBy, sortDirection }, data, selectedTalkId } = state;
+  const { user: { email }, abstractList: { nextDisabled, previousDisabled, sortBy, sortDirection }, data, selectedTalkId, mobileTab } = state;
   return {
     email,
     nextDisabled,
@@ -111,8 +101,9 @@ function mapStateToProps(state) {
     sortBy,
     sortDirection,
     data,
-    selectedTalkId
+    selectedTalkId,
+    mobileTab
   };
 }
 
-export default connect(mapStateToProps, { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate })(App);
+export default connect(mapStateToProps, { signIn, signOut, nextTalk, previousTalk, changeSortBy, toggleSortDirection, rate, changeMobileTab })(App);

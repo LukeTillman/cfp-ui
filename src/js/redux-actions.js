@@ -30,7 +30,10 @@ export const ActionTypes = {
 
   // Rate a talk or leave a comment
   RATE: 'RATE',
-  COMMENT: 'COMMENT'
+  COMMENT: 'COMMENT',
+
+  // Control of mobile tabs
+  CHANGE_MOBILE_TAB: 'CHANGE_MOBILE_TAB'
 };
 
 /**
@@ -50,6 +53,14 @@ export const SortByValues = {
 export const SortDirectionValues = {
   ASC: 'ASC',
   DESC: 'DESC'
+};
+
+/**
+ * Available tabs on mobile.
+ */
+export const MobileTabs = {
+  LIST: 1,
+  DETAILS: 2
 };
 
 /**
@@ -318,5 +329,15 @@ export function rate(rating) {
         meta: { id: selectedTalkId }
       });
     });
+  };
+};
+
+/**
+ * Change which tab is active (only applies to mobile).
+ */
+export function changeMobileTab(tab) {
+  return {
+    type: ActionTypes.CHANGE_MOBILE_TAB,
+    payload: tab
   };
 };
