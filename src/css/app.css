@@ -127,11 +127,6 @@ html, body, #cfp-app-wrapper, #cfp-app {
   background-color: #ecf0f1;
 }
 
-#talk-list-sorting > .form-group > select {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 #talk-list > .list-group {
   flex: 1;
   position: relative;
@@ -161,6 +156,11 @@ html, body, #cfp-app-wrapper, #cfp-app {
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+  #talk-list-sorting > .form-group > select {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
   #talk-list {
     border: none;
     border-right: 3px solid #ecf0f1; 
